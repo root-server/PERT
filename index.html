@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Программа PERT</title>
+    <meta charset="utf-8"/>
+    <style>
+        .b-equation-wrapper {
+            border: #389665 solid 1px;
+            max-width: 170px;
+        }
+        .b-equation-wrapper table {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .b-equation {
+            text-align: center;
+            white-space: nowrap;
+            font-family: serif;
+        }
+        .b-numerator {
+            border-bottom: black solid 1px;
+        }
+        .b-sought {
+            text-align: right;
+            font-family: serif;
+        }
+        .b-hardcode-image {
+            border: #C5BF25 solid 1px;
+            width: 113px;
+            height: 39px;
+            background: url('data:image/png;base64,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');
+        }
+        .photo {
+            /*position: relative;*/
+            padding-right: 2px;
+        }
+        .photo::before {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            border-radius: 10px;
+            content: attr(data-title);
+            position: absolute;
+            z-index: -1;
+            background: #ffffe6;
+            padding: 5px 10px;
+            border: 1px solid #333;
+            box-shadow: 2px 2px 1px silver;
+
+            margin-left: 17px;
+        }
+        .photo:hover::before {
+            visibility: visible;
+            opacity: 1;
+            z-index: 1;
+        }
+        .photo img {
+            display: inline-block;
+        }
+
+
+
+
+        .test {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<h1>PERT - Program Evaluation and Review Technique</h1>
+<h2>Анализ по трем переменным</h2>
+    <div>Расшифровки</div>
+    <table>
+        <tr>
+            <td>O :</td>
+            <td>оптимистическая оценка.</td>
+            <td>
+                <div class="photo" data-title="Это значение выбирается предельно оптимистичено. Задача может быть выполнена за это время только в том случае, если все без исключения пройдет гладко. Более того, чтобы математическая теория сработала, вероятность такого исхода должна быть менее 1% (Точное значение для нормального распределения равно 1:769, или 0,13. Вероятно, можно безопасно говорить о вероятности 1:1000);">
+                    <img width="15" src="/Content/Images/Svg/iconmonstr-help-1.svg" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>N :</td>
+            <td>номинальная оценка.</td>
+            <td>
+                <div class="photo" data-title="Наиболее вероятная оценка. На гистограмме она обычно представлена самым высоким столбцом.">
+                    <img width="15" src="/Content/Images/Svg/iconmonstr-help-2.svg" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>P :</td>
+            <td>пессимистическая оценка.</td>
+            <td>
+                <div class="photo" data-title="Эта оценка также должна быть крайне предельно пессимистической. В ней следует учесть все возможные неприятности, кроме ураганов, ядерной войны, блуждающих «черных дыр» и других катастроф. Математическая база также работает только в том случае, если вероятность этого исхода много меньше 1%.">
+                    <img width="15" src="/Content/Images/Svg/iconmonstr-help-3.svg" />
+                </div>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <colgroup>
+            <col style="white-space: nowrap;" />
+            <col />
+        </colgroup>
+        <tr>
+            <td>
+                <div class="b-equation-wrapper">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td rowspan="2" class="b-sought">µ&nbsp;=&nbsp;</td>
+                            <td class="b-equation b-numerator">O + 4N + P</td>
+                        </tr>
+                        <tr>
+                            <td class="b-equation">6</td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+            <td>
+                <div class="photo" data-title="где µ — ожидаемая продолжительность задачи. Для большинства задач оценка получается слегка завышенной, потому что правая часть распределения длиннее левой. Предполагается, что модель PERT используется для аппроксимации бетараспределения. Это разумное предположение, потому что минимальная длительность выполнения задачи обычно определяется намного точнее, чем максимальная">
+                    <img width="15" src="/Content/Images/Svg/iconmonstr-help-4.svg" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="b-equation-wrapper">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td rowspan="2" class="b-sought">σ&nbsp;=&nbsp;</td>
+                            <td class="b-equation b-numerator">P - O</td>
+                        </tr>
+                        <tr>
+                            <td class="b-equation">6</td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+            <td>
+                <div class="photo" data-title="где σ — среднеквадратическое отклонение распределения времени выполнения задачи. Фактически это мера неопределенности задачи: если это число велико, то и неопределенность тоже велика.">
+                    <img width="15" src="/Content/Images/Svg/iconmonstr-help-5.svg" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="b-hardcode-image"></div>
+            </td>
+            <td>
+                <div class="photo" data-title="µ последовательности равно сумме µ задач. σ последовательности равно квадратному корню из суммы квадратов σ задач">
+                    <img width="15" src="/Content/Images/Svg/iconmonstr-help-6.svg" />
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
