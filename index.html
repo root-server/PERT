@@ -148,5 +148,35 @@
             </td>
         </tr>
     </table>
+    <h2>Калькулятор PERT</h2>
+    <div>
+        <label>O: <input type="number" id="input-o" /></label>
+        <label>N: <input type="number" id="input-n" /></label>
+        <label>P: <input type="number" id="input-p" /></label>
+    </div>
+    <div>
+        µ: <span id="mu-result"></span>
+        σ: <span id="sigma-result"></span>
+    </div>
+
+    <script src="pert.js"></script>
+    <script>
+        function calculate() {
+            const O = parseFloat(document.getElementById('input-o').value);
+            const N = parseFloat(document.getElementById('input-n').value);
+            const P = parseFloat(document.getElementById('input-p').value);
+            if (!isNaN(O) && !isNaN(N) && !isNaN(P)) {
+                document.getElementById('mu-result').textContent = mu(O, N, P).toFixed(2);
+                document.getElementById('sigma-result').textContent = sigma(O, N, P).toFixed(2);
+            } else {
+                document.getElementById('mu-result').textContent = '';
+                document.getElementById('sigma-result').textContent = '';
+            }
+        }
+
+        ['input-o', 'input-n', 'input-p'].forEach(id => {
+            document.getElementById(id).addEventListener('input', calculate);
+        });
+    </script>
 </body>
 </html>

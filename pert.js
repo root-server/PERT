@@ -6,4 +6,9 @@ function sigma(O, N, P) {
   return (P - O) / 6;
 }
 
-module.exports = { mu, sigma };
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+  module.exports = { mu, sigma };
+} else {
+  window.mu = mu;
+  window.sigma = sigma;
+}
