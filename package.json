@@ -2,7 +2,7 @@
   "name": "pert",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "pert.js",
   "scripts": {
     "test": "node --test"
   },
