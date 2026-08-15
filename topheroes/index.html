@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Top Heroes — навигатор прогресса</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --panel:#111827;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --text:#0f172a;
+      --accent:#2563eb;
+      --accent2:#7c3aed;
+      --good:#16a34a;
+      --warn:#d97706;
+      --bad:#dc2626;
+      --line:#e5e7eb;
+      --chip:#f3f4f6;
+      --shadow:0 12px 32px rgba(2,6,23,.12);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      background:linear-gradient(180deg,#0b1220 0%, #111827 100%);
+      color:#111827;
+    }
+    .layout{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+    .sidebar{
+      background:rgba(15,23,42,.92);color:#fff;padding:24px 18px;position:sticky;top:0;height:100vh;
+      border-right:1px solid rgba(255,255,255,.08);overflow:auto
+    }
+    .brand{font-size:24px;font-weight:800;line-height:1.15;margin-bottom:10px}
+    .subtitle{color:rgba(255,255,255,.72);font-size:14px;line-height:1.5;margin-bottom:18px}
+    .status-box{
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin-bottom:18px
+    }
+    .status-box h4{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#93c5fd}
+    .status-box ul{margin:0;padding-left:18px;color:#e5e7eb;line-height:1.55;font-size:14px}
+    .nav{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+    .nav button{
+      appearance:none;border:none;text-align:left;padding:12px 14px;border-radius:14px;background:transparent;
+      color:#e5e7eb;font-size:15px;cursor:pointer;transition:.18s ease
+    }
+    .nav button:hover{background:rgba(255,255,255,.08)}
+    .nav button.active{
+      background:linear-gradient(90deg, rgba(37,99,235,.28), rgba(124,58,237,.18));
+      color:#fff;font-weight:700;box-shadow: inset 0 0 0 1px rgba(255,255,255,.08)
+    }
+    .main{padding:28px}
+    .hero{
+      background:linear-gradient(135deg,#eff6ff 0%, #f5f3ff 100%);border-radius:24px;padding:28px;
+      box-shadow:var(--shadow);margin-bottom:22px
+    }
+    .hero h1{margin:0 0 12px;font-size:34px;line-height:1.1;color:#111827}
+    .hero p{margin:0;font-size:16px;line-height:1.7;color:#334155;max-width:920px}
+    .content{display:grid;gap:22px}
+    .section{
+      display:none;background:#fff;border-radius:24px;padding:24px;box-shadow:var(--shadow)
+    }
+    .section.active{display:block}
+    .section h2{margin:0 0 8px;font-size:28px;color:#0f172a}
+    .section .lead{color:#475569;line-height:1.7;margin-bottom:18px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .card{grid-column:span 12;border:1px solid var(--line);border-radius:18px;padding:18px;background:#fff}
+    .card.half{grid-column:span 6}
+    .card.third{grid-column:span 4}
+    .card.twothird{grid-column:span 8}
+    .card h3{margin:0 0 10px;font-size:18px;color:#0f172a}
+    .card p,.card li{color:#374151;line-height:1.65;font-size:15px}
+    .card ul{margin:10px 0 0;padding-left:18px}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+    .chip{padding:6px 10px;border-radius:999px;background:#f3f4f6;color:#334155;font-size:13px;font-weight:600}
+    .chip.good{background:#ecfdf5;color:#166534}
+    .chip.warn{background:#fff7ed;color:#9a3412}
+    .chip.bad{background:#fef2f2;color:#991b1b}
+    .chip.blue{background:#eff6ff;color:#1d4ed8}
+    .chip.violet{background:#f5f3ff;color:#6d28d9}
+    .callout{border-left:4px solid var(--accent);background:#f8fafc;padding:14px 16px;border-radius:14px;margin-top:14px;color:#334155;line-height:1.6}
+    .steps{counter-reset:item;padding:0;margin:0;list-style:none}
+    .steps li{
+      counter-increment:item;margin:0 0 14px;padding:12px 12px 12px 50px;position:relative;
+      border:1px solid var(--line);border-radius:14px;background:#fff
+    }
+    .steps li::before{
+      content:counter(item);position:absolute;left:12px;top:11px;width:26px;height:26px;border-radius:50%;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px
+    }
+    .muted{color:#6b7280}
+    .footer{margin-top:18px;color:#94a3b8;font-size:13px;text-align:center}
+    @media (max-width:980px){
+      .layout{grid-template-columns:1fr}
+      .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}
+      .main{padding:18px}
+      .card.half,.card.third,.card.twothird{grid-column:span 12}
+      .hero h1{font-size:28px}
+      .nav{flex-direction:row;overflow:auto;padding-bottom:4px}
+      .nav button{white-space:nowrap}
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">Top Heroes<br>Навигатор аккаунта</div>
+      <div class="subtitle">
+        Собрано по вашим обсуждениям. Главная идея — не просто список советов, а порядок, <b>о чём думать в игре</b> и что реально двигает аккаунт.
+      </div>
+
+      <div class="status-box">
+        <h4>Текущий слепок аккаунта</h4>
+        <ul>
+          <li>Открыт <b>Astrologer</b></li>
+          <li>Открыт <b>Wilderness Hunter</b></li>
+          <li>Есть 5-е место в 3-й пачке</li>
+          <li>Главный затык — <b>мясо</b></li>
+          <li>Второй большой буст — <b>сильная активная гильдия</b></li>
+        </ul>
+      </div>
+
+      <nav class="nav" id="nav">
+        <button class="active" data-target="overview">1. С чего думать</button>
+        <button data-target="state">2. Что сейчас важно</button>
+        <button data-target="packs">3. Пачки и герои</button>
+        <button data-target="gear">4. Шмот и крафт</button>
+        <button data-target="meat">5. Мясо и stamina</button>
+        <button data-target="shops">6. Магазины</button>
+        <button data-target="guild">7. Гильдия</button>
+        <button data-target="routine">8. Ежедневный маршрут</button>
+        <button data-target="outdated">9. Что устарело</button>
+        <button data-target="blindspots">10. Что ещё важно</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <h1>Главное: не размазывать внимание</h1>
+        <p>
+          Для твоего аккаунта сейчас выигрыш идёт не от “всё по чуть-чуть”, а от нескольких правильных рычагов:
+          <b>сильная гильдия → мясо → основной состав → точечный шмот → грамотная трата stamina</b>.
+          Всё остальное вторично. Этот лендинг можно использовать как навигатор: открываешь нужную тему и быстро вспоминаешь, о чём вообще стоит думать.
+        </p>
+      </section>
+
+      <div class="content">
+        <section class="section active" id="overview">
+          <h2>1. С чего вообще думать</h2>
+          <p class="lead">Ниже — правильный порядок мыслей. Если не знаешь, чем заняться, проходи сверху вниз.</p>
+          <div class="grid">
+            <div class="card twothird">
+              <h3>Порядок принятия решений</h3>
+              <ol class="steps">
+                <li><b>Гильдия.</b> Если гильдия слабая, она режет тебе приток почти всех полезных ресурсов и активностей.</li>
+                <li><b>Основная пачка.</b> Сначала делается 1 сильная пачка, а не 3 средних.</li>
+                <li><b>Мясо.</b> Это твой текущий бутылочный горлышко, значит любые решения нужно проверять через вопрос: “помогает ли это качать core?”</li>
+                <li><b>Шмот.</b> Оранж/топ-шмот не размазывать. Делаем точечно на главных героях.</li>
+                <li><b>Stamina.</b> Смотрим, нужна ли сейчас чистая еда/мясо или ограниченные награды с босса.</li>
+                <li><b>Магазины.</b> Не покупать мусор. В магазинах легко спустить валюту в никуда.</li>
+                <li><b>Вторые/третьи пачки.</b> Только после стабилизации основной.</li>
+              </ol>
+            </div>
+            <div class="card third">
+              <h3>Три вещи, которые двигают тебя сильнее всего</h3>
+              <div class="chips">
+                <span class="chip good">Смена гильдии</span>
+                <span class="chip good">Фокус на core 5</span>
+                <span class="chip good">Fast Grind / boss по задаче</span>
+              </div>
+              <div class="callout">
+                Если коротко: <b>сильная гильдия + мясо в core + не размазывать шмот</b> дадут больше, чем десяток мелких оптимизаций.
+              </div>
+            </div>
+            <div class="card half">
+              <h3>Что НЕ является приоритетом прямо сейчас</h3>
+              <ul>
+                <li>Сильное развитие всех героев одновременно</li>
+                <li>Покупка сырых ресурсов в магазинах</li>
+                <li>Постоянная перестановка шмота ради +чуть-чуть power</li>
+                <li>Слишком ранняя прокачка второстепенных героев</li>
+                <li>Упор в шахты, если они не являются реальным bottleneck</li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Главная идея по аккаунту</h3>
+              <p>Не пытайся “оптимизировать всё”. Твой аккаунт уже перешёл в стадию, где выгоднее <b>жёстко выбирать победителей</b>: какие герои core, какой шмот core, какие валюты core.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="state">
+          <h2>2. Что сейчас важно именно тебе</h2>
+          <p class="lead">Короткий слепок состояния и ближайших решений.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Текущая картина</h3>
+              <ul>
+                <li>Появился <b>Astrologer</b> — это меняет оценку main pack.</li>
+                <li>Открылся <b>Wilderness Hunter</b> — важен как кандидат в будущий flex/secondary slot.</li>
+                <li>3-я пачка получила 5-е место — это улучшает utility/вспомогательные сборки, но не отменяет приоритет 1-й пачки.</li>
+                <li>Главный ресурсный затык сейчас — <b>мясо</b>.</li>
+                <li>Вторая крупная возможность — <b>переход в сильную активную гильдию</b>.</li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Топ-5 задач прямо сейчас</h3>
+              <ol class="steps">
+                <li>Перейти в сильную гильдию (лучший кандидат — <b>IRN IronFangLegion</b>).</li>
+                <li>Докачать core героев до стабильного уровня и не размазывать мясо.</li>
+                <li>Тратить natural stamina по логике “boss limited drops → потом Fast Grind”.</li>
+                <li>Не разбазаривать валюты магазинов на ресурсы и случайные покупки.</li>
+                <li>Собрать устойчивую главную League-пачку и уже потом донастраивать вторые составы.</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Короткий вердикт</h3>
+              <div class="chips">
+                <span class="chip good">Актуально</span>
+                <span class="chip blue">Главная мысль</span>
+              </div>
+              <p>Если бы нужно было выбрать только 2 решения с наибольшим эффектом, я бы выбрал: <b>(1) вступление в IRN</b> и <b>(2) максимальный фокус мяса/шмота в main pack</b>.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="packs">
+          <h2>3. Пачки и герои</h2>
+          <p class="lead">Не идеальная “абсолютная истина”, а практичная схема именно под твой текущий пул.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Main pack — рекомендованное ядро</h3>
+              <ul>
+                <li><b>Secret Keeper</b> — основной танк</li>
+                <li><b>Pyromancer</b> — главный источник урона</li>
+                <li><b>Bard</b> — поддержка/бафы</li>
+                <li><b>Astrologer</b> — новый сильный слот в core</li>
+                <li><b>Minister</b> — стабильный support/heal</li>
+              </ul>
+              <div class="callout"><b>Hostess</b> остаётся полезной, но при твоём текущем состоянии я бы держал её скорее как backup/flex, а не как обязательный core-slot поверх Astrologer/Minister.</div>
+            </div>
+            <div class="card half">
+              <h3>Кого держать рядом с core</h3>
+              <ul>
+                <li><b>Hostess</b> — запасной support/flex</li>
+                <li><b>Wilderness Hunter</b> — кандидат на тест в secondary/third pack после прокачки</li>
+                <li><b>Warlock</b> — вторичный carry для side content, но не приоритетнее League core</li>
+              </ul>
+              <div class="chips">
+                <span class="chip violet">Не размазывать мясо</span>
+                <span class="chip warn">Сначала core</span>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Логика по пачкам</h3>
+              <ul>
+                <li><b>1-я пачка</b> — максимум силы, шмота и мяса.</li>
+                <li><b>2-я пачка</b> — собирается из того, что не мешает 1-й.</li>
+                <li><b>3-я пачка</b> — utility / events / filler, особенно после открытия 5-го слота.</li>
+                <li>Если новый герой появляется, не ломай core мгновенно — сначала смотри <b>уровень, звезды, шмот, роль</b>.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="gear">
+          <h2>4. Шмот и крафт</h2>
+          <p class="lead">Главный принцип: хороший шмот — на главных героях, а не “всем понемногу”.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Базовые правила</h3>
+              <ul>
+                <li>Оранж/топ-шмот держать на <b>core 5</b>.</li>
+                <li>Support-герои могут жить на более слабом шмоте дольше, чем carry/tank.</li>
+                <li>Менять шмот по одной вещи стоит только если есть <b>явный выигрыш</b>, а не если просто загорелась стрелочка.</li>
+                <li>Если одиночная замена ломает полезный набор/расклад — не спеши.</li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Приоритет прокачки шмота</h3>
+              <ul>
+                <li><b>Pyromancer:</b> weapon → body → остальное</li>
+                <li><b>Secret Keeper:</b> body → head/def-slot → остальное</li>
+                <li><b>Bard / Astrologer:</b> после стабилизации танка и carry</li>
+                <li><b>Minister / Hostess:</b> позже, без фанатизма</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Практическое правило на каждый день</h3>
+              <div class="callout">
+                Если сомневаешься, не смотри на стрелочку power. Задай 3 вопроса:
+                <br>1) Это герой из main pack?
+                <br>2) Это улучшает его ключевую роль?
+                <br>3) Это не съедает ресурс, который сильнее нужен carry/tank?
+              </div>
+            </div>
+            <div class="card">
+              <h3>Что дальше крафтить</h3>
+              <p>Следующие элементы крафта стоит выбирать по роли, а не по принципу “что ближе выпало”.</p>
+              <ul>
+                <li>Сначала укрепляй ключевые слоты <b>tank + main carry</b>.</li>
+                <li>Потом — второй эшелон core (Bard / Astrologer).</li>
+                <li>Поддержку докручивай, когда main pack уже не сыпется и не упирается в выживаемость.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="meat">
+          <h2>5. Мясо и stamina</h2>
+          <p class="lead">Это твой текущий bottleneck, поэтому здесь нужен не общий совет, а прямой алгоритм.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Приоритет мяса</h3>
+              <ol class="steps">
+                <li>Pyromancer</li>
+                <li>Secret Keeper</li>
+                <li>Bard</li>
+                <li>Astrologer</li>
+                <li>Minister</li>
+                <li>Hostess</li>
+                <li>Warlock</li>
+              </ol>
+            </div>
+            <div class="card half">
+              <h3>Как тратить stamina</h3>
+              <ul>
+                <li>Если у босса ещё есть <b>ценные limited drops</b> — сначала бьёшь босса.</li>
+                <li>Если основная боль — мясо, и лимитные награды уже почти выбраны — жмёшь <b>Fast Grind</b>.</li>
+                <li>Банки/доп. stamina лучше беречь под события и гильдейские активности.</li>
+              </ul>
+              <div class="chips">
+                <span class="chip good">Fast Grind = чистое мясо</span>
+                <span class="chip blue">Boss = лут + лимиты</span>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Текущий вывод по твоим скринам</h3>
+              <p>В твоей конкретной ситуации <b>Fast Grind выгоднее по чистому мясу</b>, чем обычный пинок Troll за 10 stamina. Но босса всё равно имеет смысл добивать, пока там не закрыты хорошие limited-награды.</p>
+              <div class="callout"><b>Нужна еда/мясо — Fast Grind.</b> Нужны ограниченные предметы — <b>boss</b>.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="shops">
+          <h2>6. Магазины</h2>
+          <p class="lead">Самый опасный источник тихих ошибок. Валюта приходит медленно, а мусор покупать легко.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Что смотреть каждый день</h3>
+              <ul>
+                <li><b>Points / Medal Store</b> — core-осколки, полезные speed-up’ы, точечные нужные вещи</li>
+                <li><b>Guild Store</b> — всё, что усиливает основной прогресс, а не разовая мелочь</li>
+                <li><b>Trade Store</b> — только если понимаешь, во что именно конвертируешь валюту</li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Что почти всегда плохая покупка</h3>
+              <ul>
+                <li>Сырые ресурсы (wood/meat/stone) за ценные валюты</li>
+                <li>Случайные покупки “потому что есть скидка”</li>
+                <li>Редкие валюты без конкретной цели</li>
+                <li>Покупка всего подряд в новых вкладках магазина</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Короткая логика по магазинам</h3>
+              <div class="callout">Магазин — это место, где ты <b>конвертируешь валюту в ускорение главной цели</b>. Если покупка не ускоряет main pack / core progression / важный bottleneck, значит она под сомнением.</div>
+            </div>
+            <div class="card">
+              <h3>Если не понимаешь валюту магазина</h3>
+              <ul>
+                <li>Не трать сразу.</li>
+                <li>Посмотри источник валюты и насколько она редкая.</li>
+                <li>Спроси себя: она копится быстро или это недельный ресурс?</li>
+                <li>Предпочитай <b>гибкость</b> вместо случайной мелочи.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="guild">
+          <h2>7. Гильдия</h2>
+          <p class="lead">Это один из самых сильных рычагов роста, и у тебя тут прямо есть очевидная точка улучшения.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Как выглядит хорошая гильдия</h3>
+              <ul>
+                <li>Много участников и высокий cap</li>
+                <li>Не просто rank высокий, а <b>реально живой состав</b></li>
+                <li>R4/R5 не мёртвые и сами играют</li>
+                <li>Чат живой, есть рекрутинг, есть реакция</li>
+                <li>Есть сильные игроки 30M+, активные события, развитие территории/tech</li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Лучшие кандидаты из того, что ты показывал</h3>
+              <ol class="steps">
+                <li><b>IRN IronFangLegion</b> — лучший кандидат: сильный состав, много людей, уже есть личный контакт.</li>
+                <li><b>ATM Best Friends</b> — хороший запасной вариант.</li>
+                <li><b>MON Once Piece</b> — норм, но я бы ставил ниже IRN / ATM.</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Мой прямой совет</h3>
+              <div class="chips">
+                <span class="chip good">Высокий приоритет</span>
+                <span class="chip blue">Практический шаг</span>
+              </div>
+              <p>Я бы <b>шёл в IRN</b>. У тебя уже есть входящее сообщение от LittleTico с приглашением в более активную гильдию.</p>
+              <div class="callout">
+                Шаблон ответа:
+                <br><br>
+                <b>Hi Tico! Yes, I’m interested in joining a bigger active guild. I play daily and I’m focusing on growing my account. If you still have a spot for me, I’d be happy to join IRN.</b>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Как вступать</h3>
+              <ul>
+                <li>Ответить рекрутеру / R5</li>
+                <li>Уточнить, есть ли место и есть ли требования</li>
+                <li>Выйти из текущей гильдии только когда понимаешь, куда идёшь</li>
+                <li>После вступления сразу включаться в help/donate/activities/chat</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="routine">
+          <h2>8. Ежедневный маршрут</h2>
+          <p class="lead">Шпаргалка, чтобы не думать каждый раз заново.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Каждый день</h3>
+              <ol class="steps">
+                <li>Забрать idle rewards</li>
+                <li>Guild: help / donate / активности / чат</li>
+                <li>Потратить natural stamina по приоритету дня</li>
+                <li>Проверить ключевые магазины</li>
+                <li>Влить мясо в core-героя по текущему приоритету</li>
+                <li>Проверить, есть ли осмысленный апгрейд шмота</li>
+                <li>Закрыть dailies / events</li>
+              </ol>
+            </div>
+            <div class="card half">
+              <h3>Раз в несколько дней / неделю</h3>
+              <ul>
+                <li>Пересмотреть, не изменился ли core состав</li>
+                <li>Понять, какой следующий piece крафтится</li>
+                <li>Проверить, не застрял ли ты из-за гильдии/ивентов</li>
+                <li>Посмотреть, не пора ли копить валюту под более выгодный день/ивент</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Если совсем нет времени</h3>
+              <div class="callout">Минимальный must-do: 1) Guild activities 2) Stamina 3) Idle rewards 4) Meat в core 5) Быстрый взгляд в магазины</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="outdated">
+          <h2>9. Что устарело</h2>
+          <p class="lead">Это важно: не все старые советы одинаково актуальны.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Устарело из-за новых открытий</h3>
+              <div class="chips"><span class="chip bad">Устарело</span></div>
+              <ul>
+                <li>Советы по пачкам <b>до Astrologer</b></li>
+                <li>Советы по пачкам <b>до Wilderness Hunter</b></li>
+                <li>Любая логика <b>до открытия 5-го слота в 3-й пачке</b></li>
+                <li>Предположения, что ты надолго останешься в слабой гильдии</li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Почти не устаревает</h3>
+              <div class="chips"><span class="chip good">Не устаревает</span></div>
+              <ul>
+                <li>Сначала делай 1 сильную пачку</li>
+                <li>Не размазывай мясо и шмот</li>
+                <li>Ценные валюты не трать на сырьё</li>
+                <li>Активная гильдия сильнее пассивной почти всегда</li>
+                <li>Трать stamina под задачу, а не автоматически</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Как помечать старые советы у себя в голове</h3>
+              <ul>
+                <li>Он был дан <b>до нового героя</b>?</li>
+                <li>Он был дан <b>до нового unlock</b>?</li>
+                <li>Он был дан <b>до смены гильдии</b>?</li>
+              </ul>
+              <div class="callout">Если ответ “да”, значит совет надо не выбрасывать, а <b>переоценить</b>.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="blindspots">
+          <h2>10. О чём ты ещё не спрашивал, но стоит думать</h2>
+          <p class="lead">Это темы, которые обычно всплывают позже и стоят ресурсов, если их игнорировать.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>1) Тратить ресурсы в правильные дни</h3>
+              <p>Многие игры сильнее награждают не просто за прокачку, а за прокачку <b>во время события</b>. Это особенно важно для stamina, speed-up’ов и части валют.</p>
+            </div>
+            <div class="card half">
+              <h3>2) Не разбирать универсальные штуки без цели</h3>
+              <p>Universal relic shards, редкие сундуки, выборные ресурсы — это гибкость. Сначала цель, потом расход.</p>
+            </div>
+            <div class="card half">
+              <h3>3) Проверять новый контент на ловушки внимания</h3>
+              <p>Не всё новое срочно. Если новая механика не усиливает core, возможно, её пока достаточно просто понимать, а не качать.</p>
+            </div>
+            <div class="card half">
+              <h3>4) Второй состав — только после опоры</h3>
+              <p>Вторая и третья пачки важны, но становятся выгодными только когда первая уже не хромает.</p>
+            </div>
+            <div class="card">
+              <h3>Итоговая карта мышления</h3>
+              <div class="callout">
+                <b>1.</b> Есть ли сильная гильдия?<br>
+                <b>2.</b> Кто мой core 5?<br>
+                <b>3.</b> Куда идёт мясо сегодня?<br>
+                <b>4.</b> Есть ли осмысленный апгрейд шмота?<br>
+                <b>5.</b> Что делать со stamina: boss или Fast Grind?<br>
+                <b>6.</b> Какие покупки реально ускоряют прогресс?<br>
+                <b>7.</b> Только потом думаю о secondary/third pack.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="footer">Версия-конспект: собрана по вашим обсуждениям. Если появится новый герой / unlock / сменится гильдия, обнови соответствующие секции.</div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll('#nav button');
+    const sections = document.querySelectorAll('.section');
+    function activate(targetId){
+      buttons.forEach(btn => btn.classList.toggle('active', btn.dataset.target === targetId));
+      sections.forEach(sec => sec.classList.toggle('active', sec.id === targetId));
+      if (window.innerWidth < 980) {
+        document.getElementById(targetId).scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    }
+    buttons.forEach(btn => btn.addEventListener('click', () => activate(btn.dataset.target)));
+  </script>
+</body>
+</html>
