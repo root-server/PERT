@@ -1,200 +1,45 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Top Heroes — навигатор прогресса</title>
-  <style>
-    :root{--bg:#0f172a;--panel:#111827;--card:#fff;--muted:#6b7280;--text:#0f172a;--accent:#2563eb;--accent2:#7c3aed;--good:#16a34a;--warn:#d97706;--bad:#dc2626;--line:#e5e7eb;--shadow:0 12px 32px rgba(2,6,23,.12)}
-    *{box-sizing:border-box} html{scroll-behavior:smooth}
-    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#0b1220 0%,#111827 100%);color:#111827}
-    .layout{display:grid;grid-template-columns:310px 1fr;min-height:100vh}
-    .sidebar{background:rgba(15,23,42,.94);color:#fff;padding:24px 18px;position:sticky;top:0;height:100vh;border-right:1px solid rgba(255,255,255,.08);overflow:auto}
-    .brand{font-size:24px;font-weight:800;line-height:1.15;margin-bottom:10px}.subtitle{color:rgba(255,255,255,.72);font-size:14px;line-height:1.5;margin-bottom:18px}
-    .status-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin-bottom:18px}.status-box h4{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#93c5fd}.status-box ul{margin:0;padding-left:18px;color:#e5e7eb;line-height:1.55;font-size:14px}
-    .nav{display:flex;flex-direction:column;gap:7px;margin-top:10px}.nav button{appearance:none;border:none;text-align:left;padding:11px 13px;border-radius:13px;background:transparent;color:#e5e7eb;font-size:14px;cursor:pointer;transition:.18s ease}.nav button:hover{background:rgba(255,255,255,.08)}.nav button.active{background:linear-gradient(90deg,rgba(37,99,235,.28),rgba(124,58,237,.18));color:#fff;font-weight:700;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
-    .main{padding:28px}.hero{background:linear-gradient(135deg,#eff6ff 0%,#f5f3ff 100%);border-radius:24px;padding:28px;box-shadow:var(--shadow);margin-bottom:22px}.hero h1{margin:0 0 12px;font-size:34px;line-height:1.1}.hero p{margin:0;font-size:16px;line-height:1.7;color:#334155;max-width:980px}.version{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
-    .content{display:grid;gap:22px}.section{display:none;background:#fff;border-radius:24px;padding:24px;box-shadow:var(--shadow)}.section.active{display:block}.section h2{margin:0 0 8px;font-size:28px}.section .lead{color:#475569;line-height:1.7;margin-bottom:18px}.section-link{font-size:18px;text-decoration:none;color:#94a3b8;margin-left:8px;vertical-align:middle}.section-link:hover{color:var(--accent)}
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;border:1px solid var(--line);border-radius:18px;padding:18px;background:#fff}.card.half{grid-column:span 6}.card.third{grid-column:span 4}.card.twothird{grid-column:span 8}.card h3{margin:0 0 10px;font-size:18px}.card p,.card li{color:#374151;line-height:1.65;font-size:15px}.card ul{margin:10px 0 0;padding-left:18px}.card table{width:100%;border-collapse:collapse;font-size:14px}.card th,.card td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.card th{color:#475569;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
-    .chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}.chip{padding:6px 10px;border-radius:999px;background:#f3f4f6;color:#334155;font-size:13px;font-weight:600}.chip.good{background:#ecfdf5;color:#166534}.chip.warn{background:#fff7ed;color:#9a3412}.chip.bad{background:#fef2f2;color:#991b1b}.chip.blue{background:#eff6ff;color:#1d4ed8}.chip.violet{background:#f5f3ff;color:#6d28d9}
-    .callout{border-left:4px solid var(--accent);background:#f8fafc;padding:14px 16px;border-radius:14px;margin-top:14px;color:#334155;line-height:1.6}.callout.warn{border-left-color:var(--warn);background:#fff7ed}.callout.bad{border-left-color:var(--bad);background:#fef2f2}
-    .steps{counter-reset:item;padding:0;margin:0;list-style:none}.steps li{counter-increment:item;margin:0 0 14px;padding:12px 12px 12px 50px;position:relative;border:1px solid var(--line);border-radius:14px;background:#fff}.steps li::before{content:counter(item);position:absolute;left:12px;top:11px;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
-    .footer{margin-top:18px;color:#94a3b8;font-size:13px;text-align:center}.small{font-size:13px;color:#64748b}
-    @media(max-width:980px){.layout{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}.main{padding:18px}.card.half,.card.third,.card.twothird{grid-column:span 12}.hero h1{font-size:28px}.nav{flex-direction:row;overflow:auto;padding-bottom:4px}.nav button{white-space:nowrap}.card{overflow-x:auto}}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Top Heroes — навигатор прогресса</title>
+<style>
+:root{--bg:#0f172a;--panel:#111827;--line:#e5e7eb;--accent:#2563eb;--accent2:#7c3aed;--good:#16a34a;--warn:#d97706;--bad:#dc2626;--shadow:0 12px 32px rgba(2,6,23,.12)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#0b1220,#111827);color:#111827}.layout{display:grid;grid-template-columns:310px 1fr;min-height:100vh}.sidebar{background:rgba(15,23,42,.95);color:#fff;padding:24px 18px;position:sticky;top:0;height:100vh;overflow:auto}.brand{font-size:24px;font-weight:800;line-height:1.15;margin-bottom:10px}.subtitle{color:#cbd5e1;font-size:14px;line-height:1.5;margin-bottom:18px}.status{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin-bottom:18px}.status h4{margin:0 0 8px;color:#93c5fd;font-size:13px;text-transform:uppercase}.status ul{margin:0;padding-left:18px;color:#e5e7eb;line-height:1.55;font-size:14px}.nav{display:flex;flex-direction:column;gap:7px}.nav button{border:0;text-align:left;padding:11px 13px;border-radius:13px;background:transparent;color:#e5e7eb;font-size:14px;cursor:pointer}.nav button.active,.nav button:hover{background:linear-gradient(90deg,rgba(37,99,235,.28),rgba(124,58,237,.18));color:#fff}.main{padding:28px}.hero,.section{background:#fff;border-radius:24px;box-shadow:var(--shadow)}.hero{padding:28px;margin-bottom:22px;background:linear-gradient(135deg,#eff6ff,#f5f3ff)}.hero h1{margin:0 0 12px;font-size:34px}.hero p{margin:0;color:#334155;line-height:1.7}.version,.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.chip{padding:6px 10px;border-radius:999px;background:#f3f4f6;color:#334155;font-size:13px;font-weight:600}.chip.good{background:#ecfdf5;color:#166534}.chip.warn{background:#fff7ed;color:#9a3412}.chip.bad{background:#fef2f2;color:#991b1b}.chip.blue{background:#eff6ff;color:#1d4ed8}.chip.violet{background:#f5f3ff;color:#6d28d9}.section{display:none;padding:24px}.section.active{display:block}.section h2{margin:0 0 8px;font-size:28px}.lead{color:#475569;line-height:1.7;margin-bottom:18px}.section-link{text-decoration:none;color:#94a3b8;font-size:18px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;border:1px solid var(--line);border-radius:18px;padding:18px}.half{grid-column:span 6}.third{grid-column:span 4}.twothird{grid-column:span 8}.card h3{margin:0 0 10px;font-size:18px}.card p,.card li{color:#374151;line-height:1.65;font-size:15px}.card ul{margin:8px 0 0;padding-left:18px}.card table{width:100%;border-collapse:collapse;font-size:14px}.card th,.card td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.card th{color:#475569;font-size:12px;text-transform:uppercase}.callout{border-left:4px solid var(--accent);background:#f8fafc;padding:14px 16px;border-radius:14px;margin-top:14px;color:#334155;line-height:1.6}.callout.warn{border-left-color:var(--warn);background:#fff7ed}.steps{counter-reset:i;list-style:none;padding:0;margin:0}.steps li{counter-increment:i;position:relative;margin:0 0 12px;padding:12px 12px 12px 48px;border:1px solid var(--line);border-radius:14px}.steps li:before{content:counter(i);position:absolute;left:12px;top:11px;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}.small{font-size:13px;color:#64748b}.footer{margin-top:18px;color:#94a3b8;font-size:13px;text-align:center}@media(max-width:980px){.layout{grid-template-columns:1fr}.sidebar{position:static;height:auto}.nav{flex-direction:row;overflow:auto}.nav button{white-space:nowrap}.main{padding:18px}.half,.third,.twothird{grid-column:span 12}.hero h1{font-size:28px}.card{overflow-x:auto}}
+</style>
 </head>
 <body>
 <div class="layout">
 <aside class="sidebar">
-  <div class="brand">Top Heroes<br>Навигатор аккаунта</div>
-  <div class="subtitle">Каноническая шпаргалка по аккаунту. Новые скрины заменяют старые предположения; заменённые советы остаются в разделе «Что устарело».</div>
-  <div class="status-box">
-    <h4>Слепок 16.08.2026</h4>
-    <ul>
-      <li>Castle: <b>31</b></li>
-      <li>Main League: 6 слотов</li>
-      <li>Pyromancer / Secret Keeper / Bard: <b>Lv.170</b></li>
-      <li>Astrologer / Minister / Hostess: <b>Lv.160</b></li>
-      <li>Knight: <b>Lv.155, 248k</b></li>
-      <li>Wilderness Hunter: <b>Lv.90</b></li>
-      <li>Guild target: <b>ATM Best Friends</b> — ответили «welcome»</li>
-      <li>Главный bottleneck: <b>мясо</b></li>
-    </ul>
-  </div>
-  <nav class="nav" id="nav">
-    <button class="active" data-target="overview">1. С чего думать</button>
-    <button data-target="state">2. Что делать сейчас</button>
-    <button data-target="packs">3. Пачки и герои</button>
-    <button data-target="traits">4. Звёзды / Traits / Awakening</button>
-    <button data-target="gear">5. Шмот и крафт</button>
-    <button data-target="meat">6. Мясо и stamina</button>
-    <button data-target="shops">7. Магазины</button>
-    <button data-target="guild">8. Гильдия</button>
-    <button data-target="routine">9. Ежедневный маршрут</button>
-    <button data-target="outdated">10. Что устарело</button>
-    <button data-target="blindspots">11. Что ещё важно</button>
-  </nav>
+<div class="brand">Top Heroes<br>Навигатор аккаунта</div>
+<div class="subtitle">Новые скрины заменяют старые предположения. То, что перестало быть верным, уходит в «Что устарело».</div>
+<div class="status"><h4>Слепок 16.08.2026 · 23:38</h4><ul>
+<li>Castle: <b>31</b></li><li>Main League: <b>6 слотов</b></li><li>Pyromancer / Secret Keeper / Bard: <b>170</b></li><li>Astrologer / Minister / Hostess: <b>160</b></li><li>Knight: <b>155 · 248k</b></li><li>Wilderness Hunter: <b>90</b></li><li>Guild: <b>ATM Best Friends — вступил</b></li><li>Guild Points: <b>1335</b> после покупок</li><li>Главный bottleneck: <b>мясо</b></li>
+</ul></div>
+<nav class="nav" id="nav">
+<button class="active" data-target="overview">1. С чего думать</button><button data-target="state">2. Что делать сейчас</button><button data-target="packs">3. Пачки и герои</button><button data-target="traits">4. Звёзды / Traits</button><button data-target="gear">5. Шмот и крафт</button><button data-target="meat">6. Мясо и stamina</button><button data-target="shops">7. Магазины</button><button data-target="guild">8. Гильдия</button><button data-target="routine">9. Ежедневный маршрут</button><button data-target="outdated">10. Что устарело</button><button data-target="blindspots">11. Что ещё важно</button>
+</nav>
 </aside>
 <main class="main">
-<section class="hero">
-  <h1>Главное: сначала один боевой контур</h1>
-  <p>Текущий порядок: <b>основная League-пачка → мясо → ключевые навыки/звёзды → шмот → stamina → магазины → вторые пачки</b>. Гильдия остаётся отдельным мультипликатором: если она слабая, её надо чинить раньше микропрокачки.</p>
-  <div class="version"><span class="chip good">Обновлено 16 августа 2026</span><span class="chip blue">Полный проход по героям + skills + stars + traits</span><span class="chip good">ATM ответили: English-speaking player welcome</span></div>
-</section>
+<section class="hero"><h1>Главное: один боевой контур</h1><p><b>Main League → мясо → stars/skills → шмот → stamina → магазины → secondary packs.</b> Переезд в активную гильдию завершён; теперь задача — выжимать из ATM ежедневные help/activities, Guild Points, Guild Vault и события.</p><div class="version"><span class="chip good">ATM: вступил</span><span class="chip good">Vault Keys: приоритет №1</span><span class="chip blue">Обновлено 23:38</span></div></section>
 <div class="content">
-<section class="section active" id="overview">
-  <h2>1. С чего вообще думать <a class="section-link" href="#overview">#</a></h2>
-  <p class="lead">Если глаза разбегаются — проходи этот список сверху вниз и не открывай следующую тему, пока предыдущая не требует решения.</p>
-  <div class="grid">
-    <div class="card twothird"><h3>Порядок принятия решений</h3><ol class="steps">
-      <li><b>Main pack.</b> Сейчас это 6 героев League. Не строим три равные пачки.</li>
-      <li><b>Мясо.</b> Текущий главный дефицит: уровни дают больше пользы, если концентрировать их в core.</li>
-      <li><b>Skills / stars.</b> Усиливаем героев, которые переживут ближайшие замены.</li>
-      <li><b>Шмот.</b> Лучший шмот и крафт идут в main carry / front, а не по стрелочкам power.</li>
-      <li><b>Stamina.</b> Limited boss loot — пока он ценен; Fast Grind — когда задача именно мясо.</li>
-      <li><b>Магазины.</b> Валюта тратится только под заранее выбранную цель.</li>
-      <li><b>Пачки 2–3.</b> Получают остаточный ресурс, пока main не стабилен.</li>
-    </ol></div>
-    <div class="card third"><h3>Три ближайших рычага</h3><div class="chips"><span class="chip good">Astrologer → 170</span><span class="chip good">Knight вместо Hostess</span><span class="chip good">Переход в ATM</span></div><div class="callout">ATM — первый текущий кандидат, который ответил и прямо подтвердил, что English-speaking игроки welcome.</div></div>
-    <div class="card half"><h3>Не приоритет</h3><ul><li>Догонять уровни всех героев</li><li>Качать Hostess только потому, что она уже 160</li><li>Тратить universal shards на временных героев</li><li>Поднимать вторую/третью пачку до уровня первой</li><li>Строить ресурсные шахты «потому что можно», если это не bottleneck</li></ul></div>
-    <div class="card half"><h3>Правило нового скрина</h3><p>Любой новый герой / новый слот / новый gear tier / переход в гильдию сначала обновляет этот лендинг, а уже после этого меняются решения.</p></div>
-  </div>
-</section>
-<section class="section" id="state">
-  <h2>2. Что делать сейчас <a class="section-link" href="#state">#</a></h2>
-  <p class="lead">Список действий по текущему снимку, без абстрактных «когда-нибудь».</p>
-  <div class="grid">
-    <div class="card half"><h3>Ближайшая очередь</h3><ol class="steps">
-      <li><b>Astrologer 160 → 170.</b></li>
-      <li><b>Main pack:</b> поставить Knight вместо Hostess и проверить фронт в реальном бою.</li>
-      <li><b>Перейти в активную гильдию:</b> ATM уже подтвердили, что принимают English-speaking игроков.</li>
-      <li><b>Minister 160 → 170</b>, если main не упирается в выживаемость фронта.</li>
-      <li><b>Wilderness Hunter:</b> после main довести хотя бы до рабочего диапазона 120–150.</li>
-      <li>Universal shards / awakening currency пока не сжигать без конкретного break-point.</li>
-    </ol></div>
-    <div class="card half"><h3>Текущая main-шестёрка</h3><p><b>Knight + Secret Keeper / Pyromancer + Bard / Astrologer + Minister</b></p><div class="callout"><b>Hostess</b> теперь backup/flex. Это заменяет старую версию лендинга, где она считалась обязательным шестым слотом.</div></div>
-    <div class="card"><h3>Кого особенно ждать</h3><div class="chips"><span class="chip violet">Adjudicator</span><span class="chip violet">Nun</span><span class="chip violet">Swordmaster</span><span class="chip violet">Soulmancer</span><span class="chip violet">Sage</span><span class="chip violet">Druid</span><span class="chip violet">Pixie</span><span class="chip violet">Forest Maiden</span></div><p class="small">Появление любого из них — повод пересмотреть соответствующую пачку до вложения мяса/шардов.</p></div>
-  </div>
-</section>
-<section class="section" id="packs">
-  <h2>3. Пачки и герои <a class="section-link" href="#packs">#</a></h2>
-  <p class="lead">Актуальная раскладка после полной серии скринов.</p>
-  <div class="grid">
-    <div class="card"><h3>Пачка 1 — League, основной инвестиционный контур</h3><table><tr><th>Роль</th><th>Герои</th><th>Состояние</th></tr><tr><td>Front</td><td><b>Knight + Secret Keeper</b></td><td>Knight 155 / 248k; SK 170 / 270k</td></tr><tr><td>Damage / utility</td><td><b>Pyromancer + Bard</b></td><td>170 / 351k; 170 / 256k</td></tr><tr><td>Back</td><td><b>Astrologer + Minister</b></td><td>160 / 203k; 160 / 189k</td></tr></table><div class="chips"><span class="chip good">Инвестировать</span><span class="chip warn">Knight временный, но уже сильный</span></div></div>
-    <div class="card half"><h3>Пачка 2 — Horde</h3><p><b>Guard + Barbarian / Wilderness Hunter + Rogue / Shaman + Warlock</b></p><ul><li>Warlock 155 / 162k</li><li>Shaman 155 / 135k</li><li>Barbarian 155 / 125k</li><li>Rogue 155 / 113k</li><li>Wilderness Hunter 90 / 61k</li></ul><div class="callout">Цель замены: <b>Swordmaster</b> и <b>Soulmancer</b>. До этого не переливать сюда main-ресурсы.</div></div>
-    <div class="card half"><h3>Пачка 3 — Nature</h3><p><b>Treeguard + Windwalker + Watcher + Priestess + Dancer</b></p><ul><li>Treeguard 155 / 139k</li><li>Windwalker 155 / 134k</li><li>Priestess 155 / 130k</li><li>Watcher 155 / 122k</li><li>Dancer 155 / 119k</li></ul><div class="callout">Из этой пятёрки дольше всего защищаем вложения в <b>Treeguard + Windwalker</b>.</div></div>
-    <div class="card half"><h3>League — skills snapshot</h3><table><tr><th>Hero</th><th>Skills</th></tr><tr><td>Pyromancer</td><td>10 / 10 / 10 / 10 / 8</td></tr><tr><td>Secret Keeper</td><td>10 / 10 / 5 / 5 / 5</td></tr><tr><td>Bard</td><td>5 / 5 / 2 / 2 / 2</td></tr><tr><td>Astrologer</td><td>5 / 5 / 2 / 2 / 2</td></tr><tr><td>Minister</td><td>5 / 5 / 5 / 5</td></tr><tr><td>Hostess</td><td>5 / 2 / 2 / 2 / 2</td></tr></table></div>
-    <div class="card half"><h3>Кого не кормить сейчас</h3><ul><li>Hostess — только backup</li><li>Rogue / Barbarian — переходные Horde</li><li>Priestess / Watcher / Dancer — переходные Nature</li><li>Rare/blue — только когда есть отдельная понятная цель</li></ul></div>
-  </div>
-</section>
-<section class="section" id="traits">
-  <h2>4. Звёзды, Traits и Awakening <a class="section-link" href="#traits">#</a></h2>
-  <p class="lead">После скринов стало видно, что «уровень героя» — только один из слоёв прогресса.</p>
-  <div class="grid">
-    <div class="card half"><h3>Звёзды</h3><ul><li>Personal shards core-героев использовать проще: они привязаны к конкретной цели.</li><li><b>Universal shards</b> — не прожигать, чтобы просто закрыть маленький текущий шаг временного героя.</li><li>Secret Keeper / Treeguard / Windwalker — персональные шарды имеют понятную долгосрочную ценность.</li><li>Pyromancer сейчас упирается в персональные shards; универсалами форсить без break-point не надо.</li></ul></div>
-    <div class="card half"><h3>Traits</h3><ul><li>Knight у тебя уже очень глубоко развит: <b>10 / 10 / 10 / 5</b>.</li><li>Blacksmith: 5 / 5 / 5 / 3; Guard: 5 / 5 / 3; Pharmacist: 5 / 5 / 2.</li><li>Не путать «много открытых traits» с автоматическим приоритетом героя в основной пачке.</li><li>Пока не подтверждена точная область действия конкретного trait, <b>не тратить universal shards на off-core traits</b>.</li></ul><div class="callout warn">Старое утверждение «все такие traits глобальные на аккаунт» считаем <b>неподтверждённым</b> и больше не используем как основание для расхода редких шардов.</div></div>
-    <div class="card half"><h3>Awakening Pyromancer</h3><ul><li>Сейчас Awakening закрыт звёздным порогом.</li><li>Валюты Awakening пока не являются текущей точкой решения.</li><li>Когда откроется — сначала смотрим текущую main-шестёрку и стоимость Tier 1, потом жмём.</li></ul></div>
-    <div class="card half"><h3>Skill books — порядок</h3><p><b>Pyromancer → Astrologer → Secret Keeper → Bard</b>, если нет конкретного PvP/PvE break-point.</p><div class="callout">Pyromancer уже почти выжат по skills; поэтому новые книги всё чаще будут выгоднее на Astrologer/SK, чем на случайных secondary heroes.</div></div>
-  </div>
-</section>
-<section class="section" id="gear">
-  <h2>5. Шмот и крафт <a class="section-link" href="#gear">#</a></h2>
-  <p class="lead">Не «всем по комплекту», а лучшие предметы туда, где они меняют результат боя.</p>
-  <div class="grid">
-    <div class="card half"><h3>Приоритет</h3><ol class="steps"><li><b>Pyromancer</b> — offensive pieces</li><li><b>Secret Keeper / Knight</b> — выживаемость фронта</li><li><b>Astrologer</b> — offensive pieces</li><li><b>Bard</b></li><li><b>Minister</b></li></ol></div>
-    <div class="card half"><h3>Менять по одной вещи?</h3><p><b>Да, если одна вещь реально лучше по нужным статам.</b> Старое слишком жёсткое правило «не менять по одной» больше не используем.</p><ul><li>Не держим слабый предмет только ради симметрии.</li><li>Но не реагируем автоматически на зелёную стрелку: смотрим роль героя.</li><li>Топовый предмет со secondary героя можно временно перекинуть в main, если режим это позволяет.</li></ul></div>
-    <div class="card"><h3>Крафт</h3><p>Логика остаётся: сначала комплект/ключевые куски для <b>main carry и front</b>. Крафт вторых пачек начинается только когда новый предмет main-пачке почти ничего не даёт.</p></div>
-  </div>
-</section>
-<section class="section" id="meat">
-  <h2>6. Мясо и stamina <a class="section-link" href="#meat">#</a></h2>
-  <p class="lead">Главный bottleneck аккаунта. Здесь нужен строгий порядок.</p>
-  <div class="grid">
-    <div class="card half"><h3>Мясо — прямо сейчас</h3><ol class="steps"><li><b>Astrologer 160 → 170</b></li><li><b>Minister 160 → 170</b></li><li><b>Wilderness Hunter 90 → 120–150</b>, уже после main</li><li>Knight — только если именно фронт не держит; иначе не кормим временного танка выше необходимости</li></ol></div>
-    <div class="card half"><h3>Stamina</h3><ul><li><b>Boss</b> — пока есть нужные limited drops.</li><li><b>Fast Grind</b> — когда задача именно мясо/idle resources.</li><li>Дополнительную stamina не прожигать автоматически вне события/понятной цели.</li></ul></div>
-    <div class="card"><h3>Fast Grind snapshot</h3><p>На показанном уровне Idle Rewards было <b>15,600 meat/hour</b>, а Fast Grind давал 120 минут наград за 20 stamina. Это хороший эталон для сравнения с текущим боссом, но цифра помечена как <b>снимок</b>, а не вечное правило.</p></div>
-  </div>
-</section>
-<section class="section" id="shops">
-  <h2>7. Магазины <a class="section-link" href="#shops">#</a></h2>
-  <p class="lead">Смотри не все вкладки подряд, а магазины с валютой, которую ты реально зарабатываешь регулярно.</p>
-  <div class="grid">
-    <div class="card third"><h3>Points Store</h3><p>Смотреть <b>ежедневно</b>. Приоритет — hero shards / универсальные полезные предметы; не сливать валюту в сырьё.</p></div>
-    <div class="card third"><h3>Guild Store</h3><p>Смотреть <b>ежедневно после guild activities</b>. Guild Points приходят из активности гильдии; дорогие редкие материалы ценнее случайных speed-ups.</p></div>
-    <div class="card third"><h3>Trade Store</h3><p>Смотреть <b>при обновлении/когда накопилась trade-валюта</b>. Universal relic shards брать только когда понимаешь, какую реликвию докручиваешь.</p></div>
-    <div class="card"><h3>Правило покупки</h3><div class="callout">Перед покупкой: <b>что это ускоряет?</b> Если ответ не «main pack / bottleneck / конкретный break-point», покупку можно пропустить.</div></div>
-  </div>
-</section>
-<section class="section" id="guild">
-  <h2>8. Гильдия <a class="section-link" href="#guild">#</a></h2>
-  <p class="lead">Текущий статус поиска: <b>ATM Best Friends уже ответили положительно</b>; остальные кандидаты на момент 20:38 пока молчат.</p>
-  <div class="grid">
-    <div class="card half"><h3>ATM Best Friends — текущий №1 по действию</h3><ul><li>Твой запрос отправлен 16.08 в 01:01.</li><li>Guild Master Game Lỗi ответил в 05:43: <b>«Có / Have»</b> и <b>«Luôn chào đón bạn / Always welcome you»</b>.</li><li>То есть English-speaking игроки принимаются, и тебе фактически дали зелёный свет.</li><li>На последнем показанном составе ATM было <b>42/68</b>, поэтому мест было достаточно.</li></ul><div class="chips"><span class="chip good">Ответили</span><span class="chip good">Можно идти</span><span class="chip blue">Свежий контакт</span></div><div class="callout">Это не доказательство, что ATM объективно сильнее всех, но это <b>лучший подтверждённый вариант прямо сейчас</b>: они активны хотя бы настолько, что лидер ответил за несколько часов.</div></div>
-    <div class="card half"><h3>Остальные кандидаты</h3><ul><li><b>IRN IronFangLegion</b> выглядел сильнее на бумаге (~934M, 57/95), но сообщение LittleTico было ещё от 03.04.2026 — сегодня это уже устаревший сигнал активности.</li><li><b>MON Once Piece</b> и другие текущие обращения: ответа пока нет.</li><li>Если кто-то ответит позже — сравниваем не только influence, но и скорость ответа, требования, активность событий и наличие территории.</li></ul><div class="chips"><span class="chip warn">Ждём ответы</span><span class="chip warn">IRN — старый контакт</span></div></div>
-    <div class="card"><h3>Следующий шаг</h3><p>Я бы <b>не ждал молчунов ещё сутки ради самого факта ожидания</b>. Напиши ATM короткое подтверждение и переходи, если нет неожиданного требования:</p><div class="callout"><b>“Great, thank you! I’ll leave my current guild and apply to ATM now. My nickname is Lord_S3y8f.”</b></div><p class="small">Если игра покажет cooldown/ограничение после выхода — просто пришли скрин, и маршрут обновим.</p></div>
-  </div>
-</section>
-<section class="section" id="routine">
-  <h2>9. Ежедневный маршрут <a class="section-link" href="#routine">#</a></h2>
-  <p class="lead">Короткая последовательность, чтобы не открывать всё меню игры подряд.</p>
-  <div class="grid">
-    <div class="card half"><h3>Каждый день</h3><ol class="steps"><li>Idle Rewards</li><li>Guild: help / donate / activities</li><li>Natural stamina: boss или Fast Grind по задаче</li><li>Points + Guild Store</li><li>Мясо в текущего приоритетного героя</li><li>Только затем gear / events / вторые пачки</li></ol></div>
-    <div class="card half"><h3>Раз в неделю / после крупного unlock</h3><ul><li>Проверить main-шестёрку</li><li>Проверить следующий крафт</li><li>Проверить star/skill break-points</li><li>Проверить гильдию</li><li>Обновить этот лендинг по новым скринам</li></ul></div>
-    <div class="card"><h3>Минимум за 2 минуты</h3><div class="callout"><b>Idle → Guild → stamina → shops → meat.</b> Всё остальное можно пережить.</div></div>
-  </div>
-</section>
-<section class="section" id="outdated">
-  <h2>10. Что устарело <a class="section-link" href="#outdated">#</a></h2>
-  <p class="lead">История заменённых советов. Здесь старое не удаляется, чтобы было видно, почему решение поменялось.</p>
-  <div class="grid">
-    <div class="card half"><h3>Заменено 16.08.2026</h3><div class="chips"><span class="chip bad">Superseded</span></div><ul><li><s>Main core = 5 героев</s> → сейчас main рассматриваем как <b>6 слотов</b>.</li><li><s>Hostess обязательна в main</s> → <b>Knight вместо Hostess</b>, Hostess backup.</li><li><s>Wilderness Hunter второстепенна и почти не нужна</s> → держим как рабочий Horde-проект после main.</li><li><s>Не менять gear по одной вещи</s> → менять можно, если одиночный предмет реально усиливает роль.</li><li><s>Off-core traits обязательно качать ради глобального эффекта</s> → это больше не считаем подтверждённым.</li><li><s>IRN — текущий приоритетный кандидат в гильдии</s> → их контакт был старым; сейчас <b>ATM — первый свежий подтверждённый вариант</b>.</li></ul></div>
-    <div class="card half"><h3>Всё ещё актуально</h3><div class="chips"><span class="chip good">Stable</span></div><ul><li>Не размазывать мясо</li><li>Main pack сильнее трёх средних</li><li>Universal currencies тратить только под цель</li><li>Stamina тратить по задаче</li><li>Сильная активная гильдия — огромный мультипликатор</li></ul></div>
-    <div class="card"><h3>Как читать дату</h3><p>Совет без даты — принцип. Совет с датой — <b>snapshot аккаунта</b>. Если появляется новый герой/звезда/gear tier, snapshot может устареть в тот же день.</p></div>
-  </div>
-</section>
-<section class="section" id="blindspots">
-  <h2>11. О чём ещё стоит думать <a class="section-link" href="#blindspots">#</a></h2>
-  <p class="lead">Темы, о которых легко забыть, пока игра заваливает ресурсами.</p>
-  <div class="grid">
-    <div class="card half"><h3>Events как множитель</h3><p>Speed-ups, stamina, star upgrades и большие пачки ресурсов выгоднее тратить в моменты, когда событие дополнительно платит за то же действие.</p></div>
-    <div class="card half"><h3>Break-points вместо «качать понемногу»</h3><p>Новый skill level, полный star step, unlock awakening, новый gear tier — обычно важнее нескольких случайных микроплюсов.</p></div>
-    <div class="card half"><h3>Не путать power с качеством</h3><p>Power полезен как индикатор, но состав, роль, синергия, skill levels и survivability могут быть важнее одной цифры.</p></div>
-    <div class="card half"><h3>Скринить то, что меняет решение</h3><p>При новом герое лучше присылать: Level Up + Star + Skills/Traits + текущие пачки. Тогда обновление лендинга получается точным.</p></div>
-    <div class="card"><h3>Карта мышления</h3><div class="callout"><b>1.</b> Кто в main-6? → <b>2.</b> Кто получает мясо? → <b>3.</b> Какой следующий star/skill break-point? → <b>4.</b> Что крафтится? → <b>5.</b> Boss или Fast Grind? → <b>6.</b> Что покупать? → <b>7.</b> Только потом secondary packs.</div></div>
-  </div>
-</section>
-<div class="footer">Top Heroes account navigator · версия 2026-08-16 · ссылки вида <b>#packs</b>, <b>#traits</b>, <b>#meat</b> открывают нужный раздел напрямую.</div>
-</div>
-</main>
-</div>
+<section class="section active" id="overview"><h2>1. С чего вообще думать <a class="section-link" href="#overview">#</a></h2><p class="lead">Открывай темы сверху вниз. Если по пункту нет решения — не трать на него ресурс.</p><div class="grid"><div class="card twothird"><h3>Порядок решений</h3><ol class="steps"><li><b>Main-6.</b> Сначала состав.</li><li><b>Мясо.</b> Кормим только текущий приоритет.</li><li><b>Stars / skills.</b> Ищем break-point, а не микроплюс.</li><li><b>Gear.</b> Carry/front важнее равномерности.</li><li><b>Stamina.</b> Boss или Fast Grind по конкретной задаче.</li><li><b>Магазины.</b> Покупаем только то, что вписывается в план.</li><li><b>Secondary.</b> Остаточный ресурс.</li></ol></div><div class="card third"><h3>Три ближайших рычага</h3><div class="chips"><span class="chip good">Astrologer → 170</span><span class="chip good">Knight в main</span><span class="chip good">ATM → Guild Vault</span></div><div class="callout">Смена гильдии больше не задача. Теперь гильдия — источник ежедневного ускорения.</div></div></div></section>
+<section class="section" id="state"><h2>2. Что делать сейчас <a class="section-link" href="#state">#</a></h2><p class="lead">Очередь по текущему аккаунту.</p><div class="grid"><div class="card half"><h3>Ближайшая очередь</h3><ol class="steps"><li><b>Astrologer 160 → 170.</b></li><li>Проверить <b>Knight вместо Hostess</b> в main.</li><li>В ATM ежедневно: <b>Help → Donate/Activities → Guild Store → Vault</b>.</li><li><b>Minister 160 → 170</b>, если фронт не является проблемой.</li><li><b>Wilderness Hunter 90 → 120–150</b> уже после main.</li><li>Universal shards не прожигать без break-point.</li></ol></div><div class="card half"><h3>Main-6</h3><p><b>Knight + Secret Keeper / Pyromancer + Bard / Astrologer + Minister</b></p><div class="callout">Hostess = backup/flex.</div></div></div></section>
+<section class="section" id="packs"><h2>3. Пачки и герои <a class="section-link" href="#packs">#</a></h2><p class="lead">Инвестиционный приоритет — League.</p><div class="grid"><div class="card"><h3>League main</h3><table><tr><th>Роль</th><th>Герои</th><th>Состояние</th></tr><tr><td>Front</td><td>Knight + Secret Keeper</td><td>155 / 248k · 170 / 270k</td></tr><tr><td>Damage/utility</td><td>Pyromancer + Bard</td><td>170 / 351k · 170 / 256k</td></tr><tr><td>Back</td><td>Astrologer + Minister</td><td>160 / 203k · 160 / 189k</td></tr></table></div><div class="card half"><h3>Horde</h3><p><b>Guard + Barbarian / Wilderness Hunter + Rogue / Shaman + Warlock</b></p><div class="callout">Ждём Swordmaster / Soulmancer; не переливаем сюда main-ресурс.</div></div><div class="card half"><h3>Nature</h3><p><b>Treeguard + Windwalker + Watcher + Priestess + Dancer</b></p><div class="callout">Дольше всего защищаем вложения в Treeguard + Windwalker.</div></div></div></section>
+<section class="section" id="traits"><h2>4. Звёзды, Traits и Awakening <a class="section-link" href="#traits">#</a></h2><p class="lead">Не тратим универсальные валюты просто потому, что кнопка активна.</p><div class="grid"><div class="card half"><h3>Stars</h3><ul><li>Personal shards core-героев — безопаснее.</li><li>Universal shards — только под важный шаг.</li><li>Pyromancer не форсим универсалами без break-point.</li></ul></div><div class="card half"><h3>Traits</h3><ul><li>Knight: 10 / 10 / 10 / 5.</li><li>Blacksmith: 5 / 5 / 5 / 3.</li><li>Guard: 5 / 5 / 3.</li><li>Pharmacist: 5 / 5 / 2.</li></ul><div class="callout warn">Не считаем автоматически, что off-core traits дают глобальный эффект аккаунту.</div></div><div class="card"><h3>Skill books</h3><p><b>Pyromancer → Astrologer → Secret Keeper → Bard</b>, если нет отдельного PvP/PvE break-point.</p></div></div></section>
+<section class="section" id="gear"><h2>5. Шмот и крафт <a class="section-link" href="#gear">#</a></h2><p class="lead">Лучшие предметы туда, где они меняют бой.</p><div class="grid"><div class="card half"><h3>Приоритет</h3><ol class="steps"><li>Pyromancer — offense</li><li>Secret Keeper / Knight — survivability</li><li>Astrologer — offense</li><li>Bard</li><li>Minister</li></ol></div><div class="card half"><h3>Менять по одной?</h3><p><b>Да.</b> Если предмет реально лучше для роли — ставим; на зелёную стрелку вслепую не реагируем.</p></div><div class="card"><h3>Крафт</h3><p>Сначала carry/front main-пачки. Secondary — только когда main почти не получает прироста.</p></div></div></section>
+<section class="section" id="meat"><h2>6. Мясо и stamina <a class="section-link" href="#meat">#</a></h2><p class="lead">Главный текущий дефицит.</p><div class="grid"><div class="card half"><h3>Мясо</h3><ol class="steps"><li>Astrologer 160 → 170</li><li>Minister 160 → 170</li><li>Wilderness Hunter 90 → 120–150 после main</li><li>Knight — только если фронт реально не держит</li></ol></div><div class="card half"><h3>Stamina</h3><ul><li>Boss — пока нужны limited drops.</li><li>Fast Grind — когда нужна именно масса meat/idle ресурсов.</li><li>Stamina potions лучше не прожигать без события/цели.</li></ul></div><div class="card"><h3>Последний эталон</h3><p>Idle: <b>15,600 meat/hour</b>; Fast Grind: 120 минут наград за 20 stamina. Это snapshot, а не вечное правило.</p></div></div></section>
+<section class="section" id="shops"><h2>7. Магазины <a class="section-link" href="#shops">#</a></h2><p class="lead">Снимок после вступления в ATM: 1335 Guild Points осталось после покупок.</p><div class="grid"><div class="card third"><h3>Guild Store — Guild Points</h3><p><b>Vault Keys = №1.</b> Гайды по текущей версии прямо рекомендуют выкупать ключи; Guild Vault — источник Titan Marks для gear.</p><ul><li>На скрине дешёвый Vault Key уже <b>0/4</b>.</li><li>Rare Pet Egg также <b>0/3</b>.</li><li>Справа остаётся ещё Vault Key по <b>500</b>, лимит 30/30.</li></ul></div><div class="card third"><h3>Что после ключей</h3><p>Следом в daily-приоритете: <b>Refined Metal → Magic Stone → Pet Food</b>. Stamina Potion — полезный запас под события/фарм.</p></div><div class="card third"><h3>Что пропускать</h3><p>Server Transfer Scroll, Advanced Relocate, timber/resources — не текущий приоритет. Diamonds не важнее ключей.</p></div><div class="card"><h3>Что делать с 1335 сейчас</h3><div class="callout"><b>Не сливай остаток вслепую.</b> Открой Guild Vault, используй уже купленные ключи и пришли скрин самого Vault/награды. Если ключ за 500 — тот же расходник для Vault, его будем докупать по мере притока Guild Points.</div></div><div class="card"><h3>Остальные магазины</h3><p><b>Points Store</b> — ежедневно; <b>Trade Store</b> — когда накопилась trade-валюта/есть конкретная цель; <b>Guild Honor</b> — беречь под Soul Stones и другие редкие сезонные позиции.</p></div></div></section>
+<section class="section" id="guild"><h2>8. Гильдия <a class="section-link" href="#guild">#</a></h2><p class="lead"><b>ATM Best Friends — вступление завершено.</b> Поиск гильдии закрыт, пока фактическая активность ATM не даст повод пересматривать решение.</p><div class="grid"><div class="card half"><h3>Теперь что проверяем</h3><ul><li>Сколько help прилетает на стройку/research.</li><li>Есть ли регулярные rallies и guild events.</li><li>Как быстро копятся Guild Points/Honor.</li><li>Есть ли активный Guild Vault/territory.</li><li>Насколько живой guild chat.</li></ul></div><div class="card half"><h3>Первый эффект уже есть</h3><p>Сразу после входа открыт нормальный Guild Store: ключи куплены, осталось <b>1335 Guild Points</b>.</p><div class="chips"><span class="chip good">Joined</span><span class="chip good">Keys bought</span><span class="chip blue">Проверяем Vault</span></div></div><div class="card"><h3>Когда снова думать о смене</h3><p>Не по одной цифре influence, а если через несколько дней окажется, что мало help/rallies/events, территория мёртвая или Guild Points/Honor почти не генерируются.</p></div></div></section>
+<section class="section" id="routine"><h2>9. Ежедневный маршрут <a class="section-link" href="#routine">#</a></h2><p class="lead">Чтобы не открывать всё меню подряд.</p><div class="grid"><div class="card half"><h3>Каждый день</h3><ol class="steps"><li>Idle Rewards</li><li>Guild Help / Donate / Activities</li><li>Guild Store: daily Vault Keys и нужные материалы</li><li>Natural stamina: Boss/Fast Grind по задаче</li><li>Мясо в текущего героя</li><li>Gear/events — только потом</li></ol></div><div class="card half"><h3>Раз в неделю</h3><ul><li>Выкупить weekly Vault Keys по возможности.</li><li>Проверить Guild Honor.</li><li>Проверить main-6, крафт и star/skill break-points.</li><li>Оценить реальную активность ATM.</li></ul></div><div class="card"><h3>Минимум за 2 минуты</h3><div class="callout"><b>Idle → Guild → Store/Vault → stamina → meat.</b></div></div></div></section>
+<section class="section" id="outdated"><h2>10. Что устарело <a class="section-link" href="#outdated">#</a></h2><p class="lead">Старое оставляем видимым, чтобы понимать, почему план поменялся.</p><div class="grid"><div class="card half"><h3>Заменено 16.08.2026</h3><ul><li><s>Main core = 5</s> → main = 6 слотов.</li><li><s>Hostess обязательна</s> → Knight в main, Hostess backup.</li><li><s>Не менять gear по одной вещи</s> → менять можно по роли.</li><li><s>IRN — текущая цель</s> → ATM ответили первыми.</li><li><s>Нужно перейти в ATM</s> → <b>уже вступил</b>.</li></ul></div><div class="card half"><h3>Стабильно</h3><ul><li>Не размазывать мясо.</li><li>Main сильнее трёх средних пачек.</li><li>Universal currencies — только под цель.</li><li>Stamina — по задаче/событию.</li><li>Активная гильдия — огромный мультипликатор.</li></ul></div></div></section>
+<section class="section" id="blindspots"><h2>11. О чём ещё думать <a class="section-link" href="#blindspots">#</a></h2><p class="lead">Вещи, которые легко пропустить.</p><div class="grid"><div class="card half"><h3>Guild Vault → gear</h3><p>Vault Keys важны не сами по себе: через Guild Vault добываются Titan Marks, усиливающие gear по фракциям.</p></div><div class="card half"><h3>Events как множитель</h3><p>Stamina, shards, gear-материалы и speed-ups выгоднее тратить в окно события, которое платит за то же действие.</p></div><div class="card half"><h3>Break-points</h3><p>Полная звезда, новый skill, awakening tier или gear breakpoint обычно важнее нескольких микроплюсов.</p></div><div class="card half"><h3>Power ≠ качество</h3><p>Состав, роли, синергия и survivability могут быть важнее красивой цифры power.</p></div><div class="card"><h3>Карта мышления</h3><div class="callout"><b>1.</b> Main-6 → <b>2.</b> Meat → <b>3.</b> Stars/skills → <b>4.</b> Gear → <b>5.</b> Stamina → <b>6.</b> Shops/Guild → <b>7.</b> Secondary.</div></div></div></section>
+<div class="footer">Top Heroes account navigator · snapshot 2026-08-16 23:38 · прямые ссылки: #state · #shops · #guild · #meat</div>
+</div></main></div>
 <script>
-const buttons=[...document.querySelectorAll('#nav button')];
-const sections=[...document.querySelectorAll('.section')];
-function activate(targetId,updateHash=false){if(!sections.some(s=>s.id===targetId))targetId='overview';buttons.forEach(btn=>btn.classList.toggle('active',btn.dataset.target===targetId));sections.forEach(sec=>sec.classList.toggle('active',sec.id===targetId));if(updateHash&&location.hash!=='#'+targetId)history.pushState(null,'','#'+targetId);if(window.innerWidth<980)document.getElementById(targetId).scrollIntoView({behavior:'smooth',block:'start'});}
-buttons.forEach(btn=>btn.addEventListener('click',()=>activate(btn.dataset.target,true)));
-document.querySelectorAll('.section-link').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();activate(a.getAttribute('href').slice(1),true)}));
-window.addEventListener('hashchange',()=>activate(location.hash.slice(1)||'overview',false));
-activate(location.hash.slice(1)||'overview',false);
+const buttons=[...document.querySelectorAll('#nav button')],sections=[...document.querySelectorAll('.section')];
+function activate(id,push=false){if(!sections.some(s=>s.id===id))id='overview';buttons.forEach(b=>b.classList.toggle('active',b.dataset.target===id));sections.forEach(s=>s.classList.toggle('active',s.id===id));if(push&&location.hash!=='#'+id)history.pushState(null,'','#'+id);if(innerWidth<980)document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'})}
+buttons.forEach(b=>b.onclick=()=>activate(b.dataset.target,true));document.querySelectorAll('.section-link').forEach(a=>a.onclick=e=>{e.preventDefault();activate(a.getAttribute('href').slice(1),true)});addEventListener('hashchange',()=>activate(location.hash.slice(1)||'overview'));activate(location.hash.slice(1)||'overview');
 </script>
-</body>
-</html>
+</body></html>
