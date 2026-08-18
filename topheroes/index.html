@@ -1,1 +1,714 @@
-<!doctype html> <html lang="ru"> <head> <meta charset="utf-8" /> <meta name="viewport" content="width=device-width, initial-scale=1" /> <title>Top Heroes — навигатор прогресса</title> <style> :root{ --bg:#0f172a; --panel:#111827; --card:#ffffff; --muted:#6b7280; --text:#0f172a; --accent:#2563eb; --accent2:#7c3aed; --good:#16a34a; --warn:#d97706; --bad:#dc2626; --line:#e5e7eb; --chip:#f3f4f6; --shadow:0 12px 32px rgba(2,6,23,.12); } *{box-sizing:border-box} body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:linear-gradient(180deg,#0b1220 0%, #111827 100%); color:#111827; } .layout{display:grid;grid-template-columns:300px 1fr;min-height:100vh} .sidebar{ background:rgba(15,23,42,.92);color:#fff;padding:24px 18px;position:sticky;top:0;height:100vh; border-right:1px solid rgba(255,255,255,.08);overflow:auto } .brand{font-size:24px;font-weight:800;line-height:1.15;margin-bottom:10px} .subtitle{color:rgba(255,255,255,.72);font-size:14px;line-height:1.5;margin-bottom:18px} .status-box{ background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin-bottom:18px } .status-box h4{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#93c5fd} .status-box ul{margin:0;padding-left:18px;color:#e5e7eb;line-height:1.55;font-size:14px} .nav{display:flex;flex-direction:column;gap:8px;margin-top:10px} .nav button{ appearance:none;border:none;text-align:left;padding:12px 14px;border-radius:14px;background:transparent; color:#e5e7eb;font-size:15px;cursor:pointer;transition:.18s ease } .nav button:hover{background:rgba(255,255,255,.08)} .nav button.active{ background:linear-gradient(90deg, rgba(37,99,235,.28), rgba(124,58,237,.18)); color:#fff;font-weight:700;box-shadow: inset 0 0 0 1px rgba(255,255,255,.08) } .main{padding:28px} .hero{ background:linear-gradient(135deg,#eff6ff 0%, #f5f3ff 100%);border-radius:24px;padding:28px; box-shadow:var(--shadow);margin-bottom:22px } .hero h1{margin:0 0 12px;font-size:34px;line-height:1.1;color:#111827} .hero p{margin:0;font-size:16px;line-height:1.7;color:#334155;max-width:920px} .content{display:grid;gap:22px} .section{ display:none;background:#fff;border-radius:24px;padding:24px;box-shadow:var(--shadow) } .section.active{display:block} .section h2{margin:0 0 8px;font-size:28px;color:#0f172a} .section .lead{color:#475569;line-height:1.7;margin-bottom:18px} .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px} .card{grid-column:span 12;border:1px solid var(--line);border-radius:18px;padding:18px;background:#fff} .card.half{grid-column:span 6} .card.third{grid-column:span 4} .card.twothird{grid-column:span 8} .card h3{margin:0 0 10px;font-size:18px;color:#0f172a} .card p,.card li{color:#374151;line-height:1.65;font-size:15px} .card ul{margin:10px 0 0;padding-left:18px} .chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0} .chip{padding:6px 10px;border-radius:999px;background:#f3f4f6;color:#334155;font-size:13px;font-weight:600} .chip.good{background:#ecfdf5;color:#166534} .chip.warn{background:#fff7ed;color:#9a3412} .chip.bad{background:#fef2f2;color:#991b1b} .chip.blue{background:#eff6ff;color:#1d4ed8} .chip.violet{background:#f5f3ff;color:#6d28d9} .callout{border-left:4px solid var(--accent);background:#f8fafc;padding:14px 16px;border-radius:14px;margin-top:14px;color:#334155;line-height:1.6} .steps{counter-reset:item;padding:0;margin:0;list-style:none} .steps li{ counter-increment:item;margin:0 0 14px;padding:12px 12px 12px 50px;position:relative; border:1px solid var(--line);border-radius:14px;background:#fff } .steps li::before{ content:counter(item);position:absolute;left:12px;top:11px;width:26px;height:26px;border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px } .muted{color:#6b7280} .footer{margin-top:18px;color:#94a3b8;font-size:13px;text-align:center} @media (max-width:980px){ .layout{grid-template-columns:1fr} .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid rgba(255,255,255,.08)} .main{padding:18px} .card.half,.card.third,.card.twothird{grid-column:span 12} .hero h1{font-size:28px} .nav{flex-direction:row;overflow:auto;padding-bottom:4px} .nav button{white-space:nowrap} } </style> </head> <body> <div class="layout"> <aside class="sidebar"> <div class="brand">Top Heroes<br>Навигатор аккаунта</div> <div class="subtitle"> Собрано по вашим обсуждениям. Главная идея — не просто список советов, а порядок, <b>о чём думать в игре</b> и что реально двигает аккаунт. </div> <div class="status-box"> <h4>Текущий слепок аккаунта</h4> <ul> <li>Открыт <b>Astrologer</b></li> <li>Открыт <b>Wilderness Hunter</b></li> <li><b>Castle 31</b>: открыт 6-й слот в 3-й пачке; hero level cap поднялся до <b>175</b>.</li> <li><b>Main League сейчас Lv.170</b>: Pyromancer, Secret Keeper, Bard, Astrologer и Minister. Новый текущий cap после Castle 31 — <b>Lv.175</b>.</li> <li><b>Мясо:</b> 100% корма остаётся в 1-й пачке до cap 175. <b>Первым поднимаем Pyromancer 170 → 175</b>; secondary не получает ничего.</li> <li><b>Новый bottleneck — звёзды/traits:</b> 41 legendary universal shards и 28 epic universal shards. Astrologer уже можно апнуть личными осколками; Secret Keeper/Bard — очень дёшево универсальными.</li> <li><b>Гильдия обновлена:</b> ты уже в [ATM] Best Friends</li> <li><b>Guild Vault:</b> открыты 5 наград; последняя — <b>5 × Lv.1 Rune Chest</b>. Сейчас <b>0 ключей</b>, следующая попытка стоит <b>3</b>; копим минимум 3 ключа и снова открываем — оставшийся пул очень сильный</li> <li><b>Season 2 / Dragon Furnace:</b> последний зафиксированный слепок — 171 Obsidian и Overall Boost 760,300 / 797,400. Если уже задонатил — этот пункт считать историческим до нового скрина</li> </ul> </div> <nav class="nav" id="nav"> <button class="active" data-target="overview">1. С чего думать</button> <button data-target="state">2. Что сейчас важно</button> <button data-target="packs">3. Пачки и герои</button> <button data-target="stars">4. Звёзды и traits</button> <button data-target="gear">5. Шмот и крафт</button> <button data-target="meat">6. Мясо и stamina</button> <button data-target="shops">7. Магазины</button> <button data-target="guild">8. Гильдия</button> <button data-target="season2">9. Season 2 / Dragon Furnace</button> <button data-target="vault">10. Guild Vault</button> <button data-target="routine">11. Ежедневный маршрут</button> <button data-target="outdated">12. Что устарело</button> <button data-target="blindspots">13. Что ещё важно</button> </nav> </aside> <main class="main"> <section class="hero"> <h1>Главное: не размазывать внимание</h1> <p> Для твоего аккаунта сейчас выигрыш идёт не от “всё по чуть-чуть”, а от нескольких правильных рычагов: <b>Castle 31 → main queue 170→175 → только после полного cap думать о 2-й пачке → звёзды/traits → точечный шмот → guild/season-активности → Vault → грамотная трата stamina</b>. Сильную гильдию ты уже закрыл: сейчас ты в <b>[ATM] Best Friends</b>. Всё остальное вторично. Этот лендинг можно использовать как навигатор: открываешь нужную тему и быстро вспоминаешь, о чём вообще стоит думать. </p> </section> <div class="content"> <section class="section active" id="overview"> <h2>1. С чего вообще думать</h2> <p class="lead">Ниже — правильный порядок мыслей. Если не знаешь, чем заняться, проходи сверху вниз.</p> <div class="grid"> <div class="card twothird"> <h3>Порядок принятия решений</h3> <ol class="steps"> <li><b>Гильдия.</b> Если гильдия слабая, она режет тебе приток почти всех полезных ресурсов и активностей.</li> <li><b>Основная пачка.</b> Сначала делается 1 сильная пачка, а не 3 средних.</li> <li><b>Level cap / мясо.</b> Castle 31 поднял cap с 170 до <b>175</b>. Сейчас никакого мяса во 2-ю/3-ю пачку: сначала весь основной состав довести до 175.</li> <li><b>Звёзды и traits.</b> После cap это один из главных рычагов. Личные осколки тратим смело на core; universal shards — только там, где цена/эффект реально хорошие.</li> <li><b>Шмот.</b> Оранж/топ-шмот не размазывать. Делаем точечно на главных героях.</li> <li><b>Stamina.</b> Смотрим, нужна ли сейчас чистая еда/мясо или ограниченные награды с босса.</li> <li><b>Магазины.</b> Не покупать мусор. В магазинах легко спустить валюту в никуда.</li> <li><b>Вторые/третьи пачки.</b> Только после стабилизации основной.</li> </ol> </div> <div class="card third"> <h3>Три вещи, которые двигают тебя сильнее всего</h3> <div class="chips"> <span class="chip good">Core 170 → 175</span> <span class="chip good">Main queue → 175</span> <span class="chip good">Звёзды / traits</span> <span class="chip good">Шмот / guild / season</span> </div> <div class="callout"> Если коротко: <b>с повышением Castle до 31 старый cap 170 больше не актуален</b>. Самый прямой прирост сейчас — поднять весь main queue до 175. Никаких «излишков» мяса для вторых пачек до этого момента нет. </div> </div> <div class="card half"> <h3>Что НЕ является приоритетом прямо сейчас</h3> <ul> <li>Сильное развитие всех героев одновременно</li> <li>Покупка сырых ресурсов в магазинах</li> <li>Постоянная перестановка шмота ради +чуть-чуть power</li> <li>Слишком ранняя прокачка второстепенных героев</li> <li>Упор в шахты, если они не являются реальным bottleneck</li> </ul> </div> <div class="card half"> <h3>Главная идея по аккаунту</h3> <p>Не пытайся “оптимизировать всё”. Твой аккаунт уже перешёл в стадию, где выгоднее <b>жёстко выбирать победителей</b>: какие герои core, какой шмот core, какие валюты core.</p> </div> </div> </section> <section class="section" id="state"> <h2>2. Что сейчас важно именно тебе</h2> <p class="lead">Короткий слепок состояния и ближайших решений.</p> <div class="grid"> <div class="card half"> <h3>Свежий слепок — 17.08.2026</h3> <ul> <li><b>Pyromancer</b> — Lv.170, 352,150 power, 109K ATK, 1.61M HP, capacity 630</li> <li><b>Secret Keeper</b> — Lv.170, 290,208 power, 81.9K ATK, 1.63M HP, capacity 630</li> <li><b>Bard</b> — Lv.170, 256,414 power, 90.9K ATK, 1.39M HP, capacity 630</li> <li><b>Astrologer</b> — Lv.170, 220,414 power, 81.2K ATK, 1.17M HP, capacity 630</li> <li><b>Minister</b> — Lv.170, 201,890 power, 69.5K ATK, 1.17M HP, capacity 630</li> <li><b>Knight</b> — Lv.155, 257,803 power, 78.1K ATK, 2.36M HP, capacity 600</li> </ul> </div> <div class="card half"> <h3>Топ-5 задач прямо сейчас</h3> <ol class="steps"> <li><b>Pyromancer 170 → 175 первым.</b> Это главный carry и первый получатель мяса на новом cap.</li> <li><b>Astrologer — Upgrade звездой:</b> 5/2 личных осколков, universal shards не нужны.</li> <li><b>Secret Keeper → Bard → Pyromancer:</b> звёзды core можно улучшать параллельно, если это не съедает мясо.</li> <li><b>Minister пока не субсидировать универсалами без причины.</b></li> <li><b>Knight / Wilderness Hunter / Nature — стоп по уровням</b>, пока вся первая пачка не достигнет 175.</li> </ol> </div> <div class="card"> <h3>Свежий слепок звёзд — 17.08.2026 14:38</h3> <ul> <li><b>Legendary universal shards:</b> 41.</li> <li><b>Epic universal shards:</b> 28.</li> <li><b>Pyromancer:</b> следующий star-upgrade доступен за 16 legendary universal; личных 0/16. Видимые навыки уже 10/10/10/10/10.</li> <li><b>Secret Keeper:</b> 3 личных; следующий шаг можно закрыть за 1 universal + 3 personal вместо ожидания 4-го personal.</li> <li><b>Bard:</b> следующий шаг стоит 2 legendary universal; личных 0/2.</li> <li><b>Astrologer:</b> 5/2 personal — ап доступен без universal shards.</li> <li><b>Minister:</b> 4/8 personal; ускорение требует 4 universal + 4 personal — низкий приоритет.</li> <li><b>Knight traits:</b> 10/10/10/5; Hero HP II сейчас +15%, следующий уровень +18% и стоит 10 epic universal либо 10 личных.</li> </ul> </div> <div class="card"> <h3>Короткий вердикт</h3> <div class="chips"> <span class="chip good">Актуально</span> <span class="chip blue">Главная мысль</span> </div> <p>Сейчас главный сдвиг такой: <b>Castle 31 поднял hero cap до 175</b>. Мясо снова становится ресурсом исключительно 1-й пачки; <b>первым закрываем Pyromancer 170 → 175</b>, затем остальных героев main. Звёзды core-героев можно делать параллельно, если они не требуют мяса.</p> </div> </div> </section> <section class="section" id="packs"> <h2>3. Пачки и герои</h2> <p class="lead">Не идеальная “абсолютная истина”, а практичная схема именно под твой текущий пул.</p> <div class="grid"> <div class="card half"> <h3>Main pack — рекомендованное ядро</h3> <ul> <li><b>Secret Keeper</b> — основной танк · Lv.170 · 290,208 power</li> <li><b>Pyromancer</b> — главный источник урона · Lv.170 · 352,150 power</li> <li><b>Bard</b> — поддержка/бафы · Lv.170 · 256,414 power</li> <li><b>Astrologer</b> — сильный слот в core · Lv.170 · 220,414 power</li> <li><b>Minister</b> — стабильный support/heal · Lv.170 · 201,890 power</li> </ul> <div class="callout"><b>Hostess</b> остаётся полезной, но при твоём текущем состоянии я бы держал её скорее как backup/flex, а не как обязательный core-slot поверх Astrologer/Minister.</div> </div> <div class="card half"> <h3>Кого держать рядом с core</h3> <ul> <li><b>Knight</b> — герой 2-й пачки; <b>мясо сейчас не получает</b>, пока основной состав не закрыт на Lv.175.</li> <li><b>Hostess</b> — запасной support/flex</li> <li><b>Wilderness Hunter</b> — остаётся перспективным героем 2-й пачки, но её прокачка уровней <b>заморожена до cap 175 у main</b>.</li> <li><b>Warlock</b> — вторичный carry для side content, но не приоритетнее League core</li> </ul> <div class="chips"> <span class="chip violet">Не размазывать мясо</span> <span class="chip warn">Сначала core</span> </div> </div> <div class="card"> <h3>Логика по пачкам</h3> <ul> <li><b>1-я пачка</b> — максимум силы, шмота и мяса.</li> <li><b>2-я пачка</b> — собирается из того, что не мешает 1-й; <b>мясо получает только после полного cap main</b>.</li> <li><b>3-я пачка</b> — utility / events / filler; новый 6-й слот не является поводом отвлекать мясо от main.</li> <li>Если новый герой появляется, не ломай core мгновенно — сначала смотри <b>уровень, звезды, шмот, роль</b>.</li> </ul> </div> </div> </section> <section class="section" id="stars"> <h2>4. Звёзды и traits</h2> <p class="lead">После упора в level-cap это теперь один из главных источников роста. Ключевое правило: <b>personal shards тратим на core почти всегда, universal shards — только осознанно</b>.</p> <div class="grid"> <div class="card twothird"> <h3>Что нажимать прямо сейчас — порядок</h3> <ol class="steps"> <li><b>Astrologer — Upgrade.</b> Есть 5/2 личных осколков. Это чистый ап без расхода универсальных — практически безусловно выгодно.</li> <li><b>Secret Keeper — Upgrade через blue path.</b> Цена фактически 1 legendary universal + 3 personal вместо ожидания ещё одного личного. Для main tank это очень хороший обмен.</li> <li><b>Bard — Upgrade.</b> Нужно всего 2 legendary universal. Для core-support цена маленькая.</li> <li><b>Pyromancer — следующий кандидат.</b> Стоит 16 legendary universal при 0/16 personal. Это уже крупная трата, но герой — главный carry; после первых двух дешёвых апов у тебя останется 38 universal, после Pyro — 22.</li> <li><b>Minister — пока ждать.</b> Есть 4/8 личных; blue-path просит 4 universal + 4 personal. Лучше дождаться ещё 4 personal, если нет конкретной причины форсить.</li> <li><b>Knight traits — стоп.</b> 10 epic universal ради +3 п.п. Hero HP (15% → 18%) сейчас не выглядит лучшим применением 28 универсальных epic-осколков.</li> </ol> </div> <div class="card third"> <h3>Резерв universal shards</h3> <p><b>Legendary:</b> 41 сейчас.</p> <p>Astrologer: 0 → SK: −1 → Bard: −2 → Pyromancer: −16 = <b>22 останется</b>.</p> <div class="callout">Это хороший баланс: усиливаешь три core-слота и всё равно сохраняешь больше половины стартового запаса после дешёвых шагов.</div> </div> <div class="card half"> <h3>Почему не Minister сейчас</h3> <p>У него уже есть половина нужных личных осколков — 4/8. Universal shards здесь лишь заменяют недостающие 4. На carry/tank универсалы обычно дают больше ценности, чем на support, который и так функционален.</p> </div> <div class="card half"> <h3>Почему не Knight trait сейчас</h3> <p>Следующий Hero HP II даёт рост с +15% до +18%, но просит 10 epic universal shards при 0/10 личных. Это <b>дорогой универсальный ресурс за локальные +3 п.п. HP</b> на вторичном танке.</p> </div> <div class="card"> <h3>Правило на будущее</h3> <div class="callout">Если green Upgrade доступен только на personal shards — почти всегда нажимаем для core. Если нужен blue Upgrade с universal shards — сравниваем: <b>роль героя × цена универсалов × насколько близко следующий сильный breakpoint</b>.</div> </div> </div> </section> <section class="section" id="gear"> <h2>5. Шмот и крафт</h2> <p class="lead">Главный принцип: хороший шмот — на главных героях, а не “всем понемногу”.</p> <div class="grid"> <div class="card half"> <h3>Базовые правила</h3> <ul> <li>Оранж/топ-шмот держать на <b>core 5</b>.</li> <li>Support-герои могут жить на более слабом шмоте дольше, чем carry/tank.</li> <li>Менять шмот по одной вещи стоит только если есть <b>явный выигрыш</b>, а не если просто загорелась стрелочка.</li> <li>Если одиночная замена ломает полезный набор/расклад — не спеши.</li> </ul> </div> <div class="card half"> <h3>Приоритет прокачки шмота</h3> <ul> <li><b>Pyromancer:</b> weapon → body → остальное</li> <li><b>Secret Keeper:</b> body → head/def-slot → остальное</li> <li><b>Bard / Astrologer:</b> после стабилизации танка и carry</li> <li><b>Minister / Hostess:</b> позже, без фанатизма</li> </ul> </div> <div class="card"> <h3>Практическое правило на каждый день</h3> <div class="callout"> Если сомневаешься, не смотри на стрелочку power. Задай 3 вопроса: <br>1) Это герой из main pack? <br>2) Это улучшает его ключевую роль? <br>3) Это не съедает ресурс, который сильнее нужен carry/tank? </div> </div> <div class="card"> <h3>Что дальше крафтить</h3> <p>Следующие элементы крафта стоит выбирать по роли, а не по принципу “что ближе выпало”.</p> <ul> <li>Сначала укрепляй ключевые слоты <b>tank + main carry</b>.</li> <li>Потом — второй эшелон core (Bard / Astrologer).</li> <li>Поддержку докручивай, когда main pack уже не сыпется и не упирается в выживаемость.</li> </ul> </div> </div> </section> <section class="section" id="meat"> <h2>6. Мясо и stamina</h2> <p class="lead">Castle 31 поднял hero level cap до <b>175</b>. Поэтому правило снова жёсткое: <b>100% мяса — в 1-ю пачку, пока каждый герой main queue не достигнет 175</b>.</p> <div class="grid"> <div class="card half"> <h3>Приоритет мяса — 18.08.2026</h3> <ol class="steps"> <li><b>Pyromancer 170 → 175 — первым.</b> Главный carry получает новый cap раньше остальных.</li> <li>Дальше закрываем остальных героев 1-й пачки; базово: <b>Secret Keeper → Astrologer → Bard → Minister</b>. Если бой явно упирается в выживаемость фронта, Secret Keeper можно ускорить ещё сильнее.</li> <li>Пока хотя бы один герой первой пачки ниже 175 — <b>вторая и третья пачки получают 0 мяса</b>.</li> <li>После полного 175 — <b>сначала копить под следующий cap</b> (Castle 32 = 180), особенно если ап Castle уже близко.</li> <li>Только если следующий Castle далеко и запас действительно избыточный — заново решаем, стоит ли кормить secondary.</li> </ol> </div> <div class="card half"> <h3>Кого сейчас НЕ кормить</h3> <ul> <li><b>Knight</b> — даже если 155 и кажется дешёвым апом.</li> <li><b>Wilderness Hunter</b> — большой level-gap пока терпим.</li> <li><b>Treeguard / Windwalker / Watcher / Priestess / Dancer / Pharmacist</b> — 3-я пачка использует то, что уже есть.</li> <li><b>Hostess</b> — вне текущего core, значит без мяса.</li> </ul> <div class="callout"><b>Коротко:</b> Pyromancer → 175 первым; затем вся 1-я пачка → 175; потом копить под 180. Secondary — ноль мяса до этого.</div> </div> <div class="card half"> <h3>Как тратить stamina</h3> <ul> <li>Если у босса ещё есть <b>ценные limited drops</b> — сначала бьёшь босса.</li> <li>Если лимитные награды выбраны и нужен именно корм — <b>Fast Grind</b>.</li> <li>Банки/доп. stamina держи под события, где расход даёт второй слой наград.</li> </ul> </div> <div class="card half"> <h3>Исправление старого совета</h3> <p>Совет <b>«Knight → Wilderness Hunter»</b> был преждевременным: он исходил из cap 170. После Castle 31 cap стал 175, поэтому весь корм снова возвращается в первую пачку.</p> </div> </div> </section> <section class="section" id="shops"> <h2>7. Магазины</h2> <p class="lead">Самый опасный источник тихих ошибок. Валюта приходит медленно, а мусор покупать легко.</p> <div class="grid"> <div class="card half"> <h3>Что смотреть каждый день</h3> <ul> <li><b>Points / Medal Store</b> — core-осколки, полезные speed-up’ы, точечные нужные вещи</li> <li><b>Guild Store</b> — всё, что усиливает основной прогресс, а не разовая мелочь</li> <li><b>Trade Store</b> — только если понимаешь, во что именно конвертируешь валюту</li> </ul> </div> <div class="card half"> <h3>Что почти всегда плохая покупка</h3> <ul> <li>Сырые ресурсы (wood/meat/stone) за ценные валюты</li> <li>Случайные покупки “потому что есть скидка”</li> <li>Редкие валюты без конкретной цели</li> <li>Покупка всего подряд в новых вкладках магазина</li> </ul> </div> <div class="card"> <h3>Короткая логика по магазинам</h3> <div class="callout">Магазин — это место, где ты <b>конвертируешь валюту в ускорение главной цели</b>. Если покупка не ускоряет main pack / core progression / важный bottleneck, значит она под сомнением.</div> </div> <div class="card"> <h3>Если не понимаешь валюту магазина</h3> <ul> <li>Не трать сразу.</li> <li>Посмотри источник валюты и насколько она редкая.</li> <li>Спроси себя: она копится быстро или это недельный ресурс?</li> <li>Предпочитай <b>гибкость</b> вместо случайной мелочи.</li> </ul> </div> </div> </section> <section class="section" id="guild"> <h2>8. Гильдия</h2> <p class="lead">Точка роста закрыта: ты уже перешёл в более сильную и живую гильдию — <b>[ATM] Best Friends</b>.</p> <div class="grid"> <div class="card half"> <h3>Текущий статус</h3> <div class="chips"><span class="chip good">Сделано</span><span class="chip blue">[ATM] Best Friends</span></div> <ul> <li>Гильдия заметно сильнее прежней</li> <li>Есть активные R4/R5 и сильные игроки</li> <li>Открыт полноценный Guild Store и Guild Vault</li> <li>Теперь выгоду надо забирать <b>ежедневно</b>, иначе сам переход теряет смысл</li> </ul> </div> <div class="card half"> <h3>Что делать каждый день</h3> <ol class="steps"> <li>Help / guild activities / donations</li> <li>Проверить Guild Store</li> <li>Проверить Guild Vault и цену следующего открытия</li> <li>Участвовать в guild-событиях — это источник магазинной валюты и ключей</li> </ol> </div> <div class="card"> <h3>Что теперь считается ошибкой</h3> <div class="callout">Считать задачу «найти гильдию» всё ещё актуальной. Она уже решена. Теперь задача — <b>выжимать value из ATM</b>: store, vault, активности, help и события.</div> </div> </div> </section> <section class="section" id="season2"> <h2>9. Season 2 / Dragon Furnace</h2> <p class="lead">Сезонная гильдейская механика, которую теперь стоит считать ежедневным обязательным ресурсным контуром.</p> <div class="grid"> <div class="card half"> <h3>Что делать с Obsidian</h3> <div class="callout"><b>Жертвовать в Dragon Furnace.</b> Для твоего текущего состояния нет смысла держать Obsidian “на потом”: это ресурс прокачки гильдейской печи, а донат одновременно двигает общие сезонные бафы и даёт Guild Points.</div> <ul> <li>У тебя сейчас: <b>171 Obsidian</b></li> <li>Каждая единица: <b>+100</b> прогресса furnace и <b>+10 Guild Points</b></li> <li>Если отдать все 171: <b>+17,100</b> к шкале и <b>+1,710 Guild Points</b></li> </ul> </div> <div class="card half"> <h3>Почему прямо сейчас особенно выгодно</h3> <p>Overall Boost сейчас <b>760,300 / 797,400</b>. До следующего апгрейда не хватает <b>37,100</b>. Твои 171 Obsidian закроют <b>17,100</b> — почти половину остатка — и оставят гильдии всего <b>20,000</b> прогресса.</p> <div class="chips"><span class="chip good">Donate all 171</span><span class="chip blue">+1,710 Guild Points</span></div> </div> <div class="card half"> <h3>Что даст следующий Overall Boost</h3> <ul> <li>Temperature: <b>7.5°C → 7.8°C</b></li> <li>Soldier Training Speed: <b>21% → 22%</b></li> <li>Healing Speed: <b>15% → 15.5%</b></li> <li>PvE Marching Speed: <b>20% → 20.5%</b></li> </ul> </div> <div class="card half"> <h3>Откуда брать Obsidian</h3> <ul> <li>обычный seasonal Point Match</li> <li>season merchant / caravan rewards</li> <li>автопроизводство захваченных гильдией ruins</li> </ul> <div class="callout">Практическое правило: <b>Obsidian не складируем — регулярно отдаём furnace</b>. Исключение только если в игре прямо появляется отдельный временный ивент с очками именно за момент доната.</div> </div> </div> </section> <section class="section" id="vault"> <h2>10. Guild Vault</h2> <p class="lead">Новая важная механика. Здесь ключи конвертируются в случайные награды из пула из 10 позиций, а цена открытия растёт после каждого клика.</p> <div class="grid"> <div class="card half"> <h3>Что мы уже точно видим</h3> <ul> <li>В пуле <b>10 наград</b>; после сбора всех 10 Vault сбрасывается автоматически</li> <li>Цена растёт ступенчато: было <b>1 → 2 → 2 → 2 → 3 → 3</b> ключа за открытия</li> <li>После пяти открытий у тебя теперь <b>0 ключей</b>; следующая попытка всё ещё стоит <b>3 ключа</b></li> <li>Уже получено: <b>30 × 5-минутных speed-up</b>, <b>Advanced Relocate</b>, <b>5 × Level-tied Stone Chest</b>, <b>5 × красный/ruby resource chest</b> и <b>5 × Lv.1 Rune Chest</b></li> <li>В оставшемся пуле всего <b>5 наград</b>: <b>Titan Mark</b>, <b>1000 diamonds</b>, <b>5 meat chests</b>, <b>3 recruitment tickets</b> и <b>5 timber chests</b></li> </ul> </div> <div class="card half"> <h3>Что такое Titan Mark</h3> <p>По описанию в игре: это редкий материал, который позволяет создать <b>faction mark</b> при крафте gear. Поэтому его не тратить вслепую и не считать обычным расходником.</p> <div class="chips"><span class="chip good">Сохранять</span><span class="chip blue">Gear progression</span></div> </div> <div class="card"> <h3>Что делать прямо сейчас</h3> <div class="callout"><b>Сейчас стоп только потому, что ключей 0.</b> Следующее открытие стоит <b>3</b>, а оставшийся пул стал даже привлекательнее: 5 наград, из которых <b>Titan Mark + 1000 diamonds + 5 meat chests</b> — три очень хорошие цели. Поэтому как только накопишь <b>3 Vault Keys</b>, открывай ещё раз. Если цена после этого вырастет — снова переоценим пул.</div> </div> <div class="card half"> <h3>Правило расхода ключей</h3> <ul> <li>Дешёвые ранние открытия — почти всегда стоит брать</li> <li>Чем выше цена следующей попытки, тем важнее смотреть на оставшийся пул</li> <li>Не покупать сырые ресурсы в Guild Store, если та же валюта может превратиться в Vault Keys</li> <li>Не прожимать серию вслепую: после каждого роста цены заново оцениваем оставшийся пул</li> </ul> </div> <div class="card half"> <h3>Следующий контрольный скрин</h3> <p><b>Прямо сейчас:</b> ничего не нажимаем — ключей 0. Следующая контрольная точка: купил/получил ещё <b>3 Vault Keys</b> → открывай один раз и присылай результат. Сейчас особенно важно поймать <b>Titan Mark</b>, diamonds или meat; при росте цены после следующего клика пересчитаем ценность.</p> </div> </div> </section> <section class="section" id="routine"> <h2>11. Ежедневный маршрут</h2> <p class="lead">Шпаргалка, чтобы не думать каждый раз заново.</p> <div class="grid"> <div class="card half"> <h3>Каждый день</h3> <ol class="steps"> <li>Забрать idle rewards</li> <li>Guild: help / donate / активности / чат</li> <li>Season 2: Obsidian → Dragon Furnace; сейчас можно отдать <b>все 171</b> (это +17,100 furnace progress и +1,710 Guild Points)</li> <li>Guild Store + Vault: сейчас <b>0 ключей / цена 3</b> — копить минимум 3 Vault Keys и открыть ещё 1 раз; ключи остаются приоритетной покупкой Guild Points</li> <li>Потратить natural stamina по приоритету дня</li> <li>Проверить остальные ключевые магазины</li> <li>Проверить main queue: все ли герои уже Lv.175. Пока нет — весь корм только туда</li> <li>Проверить, есть ли осмысленный апгрейд шмота</li> <li>Закрыть dailies / events</li> </ol> </div> <div class="card half"> <h3>Раз в несколько дней / неделю</h3> <ul> <li>Пересмотреть, не изменился ли core состав</li> <li>Понять, какой следующий piece крафтится</li> <li>Проверить, не застрял ли ты из-за гильдии/ивентов</li> <li>Посмотреть, не пора ли копить валюту под более выгодный день/ивент</li> </ul> </div> <div class="card"> <h3>Если совсем нет времени</h3> <div class="callout">Минимальный must-do: 1) Guild activities + Vault 2) Stamina 3) Idle rewards 4) Весь main queue → 175 5) Быстрый взгляд в магазины</div> </div> </div> </section> <section class="section" id="outdated"> <h2>12. Что устарело</h2> <p class="lead">Это важно: не все старые советы одинаково актуальны.</p> <div class="grid"> <div class="card half"> <h3>Устарело из-за новых открытий</h3> <div class="chips"><span class="chip bad">Устарело</span></div> <ul> <li>Советы по пачкам <b>до Astrologer</b></li> <li>Советы по пачкам <b>до Wilderness Hunter</b></li> <li>Любая логика <b>до открытия 5-го слота в 3-й пачке</b></li> <li>Предположения, что ты надолго останешься в слабой гильдии</li> <li>Старый вывод «после 170 можно кормить secondary» — <b>устарел</b>: Castle 31 поднял cap до 175, поэтому мясо снова главный ресурс main queue.</li> <li>Совет «идти в IRN» как текущая цель — <b>устарел</b>: ты уже вступил в [ATM] Best Friends</li> </ul> </div> <div class="card half"> <h3>Почти не устаревает</h3> <div class="chips"><span class="chip good">Не устаревает</span></div> <ul> <li>Сначала делай 1 сильную пачку</li> <li>Не размазывай мясо и шмот</li> <li>Ценные валюты не трать на сырьё</li> <li>Активная гильдия сильнее пассивной почти всегда</li> <li>Трать stamina под задачу, а не автоматически</li> </ul> </div> <div class="card"> <h3>Как помечать старые советы у себя в голове</h3> <ul> <li>Он был дан <b>до нового героя</b>?</li> <li>Он был дан <b>до нового unlock</b>?</li> <li>Он был дан <b>до смены гильдии</b>?</li> </ul> <div class="callout">Если ответ “да”, значит совет надо не выбрасывать, а <b>переоценить</b>.</div> </div> </div> </section> <section class="section" id="blindspots"> <h2>13. О чём ты ещё не спрашивал, но стоит думать</h2> <p class="lead">Это темы, которые обычно всплывают позже и стоят ресурсов, если их игнорировать.</p> <div class="grid"> <div class="card half"> <h3>1) Тратить ресурсы в правильные дни</h3> <p>Многие игры сильнее награждают не просто за прокачку, а за прокачку <b>во время события</b>. Это особенно важно для stamina, speed-up’ов и части валют.</p> </div> <div class="card half"> <h3>2) Не разбирать универсальные штуки без цели</h3> <p>Universal relic shards, редкие сундуки, выборные ресурсы — это гибкость. Сначала цель, потом расход.</p> </div> <div class="card half"> <h3>3) Проверять новый контент на ловушки внимания</h3> <p>Не всё новое срочно. Если новая механика не усиливает core, возможно, её пока достаточно просто понимать, а не качать.</p> </div> <div class="card half"> <h3>4) Второй состав — только после опоры</h3> <p>Вторая и третья пачки важны, но становятся выгодными только когда первая уже не хромает.</p> </div> <div class="card"> <h3>Итоговая карта мышления</h3> <div class="callout"> <b>1.</b> Есть ли сильная гильдия?<br> <b>2.</b> Кто мой core 5?<br> <b>3.</b> Есть ли новый level-cap? Сейчас да: Castle 31 = 175. Пока main ниже 175 — мясо только туда.<br> <b>4.</b> Есть ли бесплатный/дешёвый star-upgrade на core без слива universal shards?<br> <b>5.</b> Есть ли осмысленный апгрейд шмота?<br> <b>6.</b> Что делать со stamina: boss или Fast Grind?<br> <b>7.</b> Какие покупки реально ускоряют прогресс?<br> <b>8.</b> Только потом думаю о secondary/third pack. </div> </div> </div> </section> <div class="footer">Обновлено 18.08.2026 18:49: мясо остаётся на 100% в 1-й пачке. Первый ап нового cap — Pyromancer 170 → 175; затем остальные герои main. Knight, Wilderness Hunter и Nature-состав заморожены по уровням; после полного 175 копим под cap 180.</div> </div> </main> </div> <script> const buttons = document.querySelectorAll('#nav button'); const sections = document.querySelectorAll('.section'); function activate(targetId){ buttons.forEach(btn => btn.classList.toggle('active', btn.dataset.target === targetId)); sections.forEach(sec => sec.classList.toggle('active', sec.id === targetId)); if (window.innerWidth < 980) { document.getElementById(targetId).scrollIntoView({behavior:'smooth', block:'start'}); } } buttons.forEach(btn => btn.addEventListener('click', () => { const id = btn.dataset.target; activate(id); history.replaceState(null, '', '#' + id); })); const initial = location.hash.replace('#',''); if (initial && document.getElementById(initial)) activate(initial); </script> </body> </html>
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Top Heroes — навигатор прогресса</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --panel:#111827;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --text:#0f172a;
+      --accent:#2563eb;
+      --accent2:#7c3aed;
+      --good:#16a34a;
+      --warn:#d97706;
+      --bad:#dc2626;
+      --line:#e5e7eb;
+      --chip:#f3f4f6;
+      --shadow:0 12px 32px rgba(2,6,23,.12);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      background:linear-gradient(180deg,#0b1220 0%, #111827 100%);
+      color:#111827;
+    }
+    .layout{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+    .sidebar{
+      background:rgba(15,23,42,.92);color:#fff;padding:24px 18px;position:sticky;top:0;height:100vh;
+      border-right:1px solid rgba(255,255,255,.08);overflow:auto
+    }
+    .brand{font-size:24px;font-weight:800;line-height:1.15;margin-bottom:10px}
+    .subtitle{color:rgba(255,255,255,.72);font-size:14px;line-height:1.5;margin-bottom:18px}
+    .status-box{
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin-bottom:18px
+    }
+    .status-box h4{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#93c5fd}
+    .status-box ul{margin:0;padding-left:18px;color:#e5e7eb;line-height:1.55;font-size:14px}
+    .nav{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+    .nav button{
+      appearance:none;border:none;text-align:left;padding:12px 14px;border-radius:14px;background:transparent;
+      color:#e5e7eb;font-size:15px;cursor:pointer;transition:.18s ease
+    }
+    .nav button:hover{background:rgba(255,255,255,.08)}
+    .nav button.active{
+      background:linear-gradient(90deg, rgba(37,99,235,.28), rgba(124,58,237,.18));
+      color:#fff;font-weight:700;box-shadow: inset 0 0 0 1px rgba(255,255,255,.08)
+    }
+    .main{padding:28px}
+    .hero{
+      background:linear-gradient(135deg,#eff6ff 0%, #f5f3ff 100%);border-radius:24px;padding:28px;
+      box-shadow:var(--shadow);margin-bottom:22px
+    }
+    .hero h1{margin:0 0 12px;font-size:34px;line-height:1.1;color:#111827}
+    .hero p{margin:0;font-size:16px;line-height:1.7;color:#334155;max-width:920px}
+    .content{display:grid;gap:22px}
+    .section{
+      display:none;background:#fff;border-radius:24px;padding:24px;box-shadow:var(--shadow)
+    }
+    .section.active{display:block}
+    .section h2{margin:0 0 8px;font-size:28px;color:#0f172a}
+    .section .lead{color:#475569;line-height:1.7;margin-bottom:18px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .card{grid-column:span 12;border:1px solid var(--line);border-radius:18px;padding:18px;background:#fff}
+    .card.half{grid-column:span 6}
+    .card.third{grid-column:span 4}
+    .card.twothird{grid-column:span 8}
+    .card h3{margin:0 0 10px;font-size:18px;color:#0f172a}
+    .card p,.card li{color:#374151;line-height:1.65;font-size:15px}
+    .card ul{margin:10px 0 0;padding-left:18px}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+    .chip{padding:6px 10px;border-radius:999px;background:#f3f4f6;color:#334155;font-size:13px;font-weight:600}
+    .chip.good{background:#ecfdf5;color:#166534}
+    .chip.warn{background:#fff7ed;color:#9a3412}
+    .chip.bad{background:#fef2f2;color:#991b1b}
+    .chip.blue{background:#eff6ff;color:#1d4ed8}
+    .chip.violet{background:#f5f3ff;color:#6d28d9}
+    .callout{border-left:4px solid var(--accent);background:#f8fafc;padding:14px 16px;border-radius:14px;margin-top:14px;color:#334155;line-height:1.6}
+    .steps{counter-reset:item;padding:0;margin:0;list-style:none}
+    .steps li{
+      counter-increment:item;margin:0 0 14px;padding:12px 12px 12px 50px;position:relative;
+      border:1px solid var(--line);border-radius:14px;background:#fff
+    }
+    .steps li::before{
+      content:counter(item);position:absolute;left:12px;top:11px;width:26px;height:26px;border-radius:50%;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px
+    }
+    .muted{color:#6b7280}
+    .footer{margin-top:18px;color:#94a3b8;font-size:13px;text-align:center}
+    @media (max-width:980px){
+      .layout{grid-template-columns:1fr}
+      .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}
+      .main{padding:18px}
+      .card.half,.card.third,.card.twothird{grid-column:span 12}
+      .hero h1{font-size:28px}
+      .nav{flex-direction:row;overflow:auto;padding-bottom:4px}
+      .nav button{white-space:nowrap}
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">Top Heroes<br>Навигатор аккаунта</div>
+      <div class="subtitle">
+        Собрано по вашим обсуждениям. Главная идея — не просто список советов, а порядок, <b>о чём думать в игре</b> и что реально двигает аккаунт.
+      </div>
+
+      <div class="status-box">
+        <h4>Текущий слепок аккаунта</h4>
+        <ul>
+          <li>Открыт <b>Astrologer</b></li>
+          <li>Открыт <b>Wilderness Hunter</b></li>
+          <li><b>Castle 31</b>: открыт 6-й слот в 3-й пачке; hero level cap поднялся до <b>175</b>.</li>
+          <li><b>Main League — текущие 6:</b> Pyromancer 170, Secret Keeper 170, Knight 155, Bard 170, Astrologer 170, Minister 170. Новый cap после Castle 31 — <b>Lv.175</b>.</li>
+          <li><b>Мясо:</b> 100% корма идёт в текущую 1-ю пачку из 6 героев. <b>Сначала Pyromancer 170→175, затем Knight 155→175</b>; потом закрываем остальных до 175.</li>
+          <li><b>Новый bottleneck — звёзды/traits:</b> 41 legendary universal shards и 28 epic universal shards. Astrologer уже можно апнуть личными осколками; Secret Keeper/Bard — очень дёшево универсальными.</li>
+          <li><b>Гильдия обновлена:</b> ты уже в [ATM] Best Friends</li>
+          <li><b>Guild Vault:</b> открыты 5 наград; последняя — <b>5 × Lv.1 Rune Chest</b>. Сейчас <b>0 ключей</b>, следующая попытка стоит <b>3</b>; копим минимум 3 ключа и снова открываем — оставшийся пул очень сильный</li>
+          <li><b>Season 2 / Dragon Furnace:</b> последний зафиксированный слепок — 171 Obsidian и Overall Boost 760,300 / 797,400. Если уже задонатил — этот пункт считать историческим до нового скрина</li>
+        </ul>
+      </div>
+
+      <nav class="nav" id="nav">
+        <button class="active" data-target="overview">1. С чего думать</button>
+        <button data-target="state">2. Что сейчас важно</button>
+        <button data-target="packs">3. Пачки и герои</button>
+        <button data-target="stars">4. Звёзды и traits</button>
+        <button data-target="gear">5. Шмот и крафт</button>
+        <button data-target="meat">6. Мясо и stamina</button>
+        <button data-target="shops">7. Магазины</button>
+        <button data-target="guild">8. Гильдия</button>
+        <button data-target="season2">9. Season 2 / Dragon Furnace</button>
+        <button data-target="vault">10. Guild Vault</button>
+        <button data-target="routine">11. Ежедневный маршрут</button>
+        <button data-target="outdated">12. Что устарело</button>
+        <button data-target="blindspots">13. Что ещё важно</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <h1>Главное: не размазывать внимание</h1>
+        <p>
+          Для твоего аккаунта сейчас выигрыш идёт не от “всё по чуть-чуть”, а от нескольких правильных рычагов:
+          <b>Castle 31 → main queue 170→175 → только после полного cap думать о 2-й пачке → звёзды/traits → точечный шмот → guild/season-активности → Vault → грамотная трата stamina</b>.
+          Сильную гильдию ты уже закрыл: сейчас ты в <b>[ATM] Best Friends</b>.
+          Всё остальное вторично. Этот лендинг можно использовать как навигатор: открываешь нужную тему и быстро вспоминаешь, о чём вообще стоит думать.
+        </p>
+      </section>
+
+      <div class="content">
+        <section class="section active" id="overview">
+          <h2>1. С чего вообще думать</h2>
+          <p class="lead">Ниже — правильный порядок мыслей. Если не знаешь, чем заняться, проходи сверху вниз.</p>
+          <div class="grid">
+            <div class="card twothird">
+              <h3>Порядок принятия решений</h3>
+              <ol class="steps">
+                <li><b>Гильдия.</b> Если гильдия слабая, она режет тебе приток почти всех полезных ресурсов и активностей.</li>
+                <li><b>Основная пачка.</b> Сначала делается 1 сильная пачка, а не 3 средних.</li>
+                <li><b>Level cap / мясо.</b> Castle 31 поднял cap с 170 до <b>175</b>. Сейчас никакого мяса во 2-ю/3-ю пачку: сначала весь основной состав довести до 175.</li>
+                <li><b>Звёзды и traits.</b> После cap это один из главных рычагов. Личные осколки тратим смело на core; universal shards — только там, где цена/эффект реально хорошие.</li>
+                <li><b>Шмот.</b> Оранж/топ-шмот не размазывать. Делаем точечно на главных героях.</li>
+                <li><b>Stamina.</b> Смотрим, нужна ли сейчас чистая еда/мясо или ограниченные награды с босса.</li>
+                <li><b>Магазины.</b> Не покупать мусор. В магазинах легко спустить валюту в никуда.</li>
+                <li><b>Вторые/третьи пачки.</b> Только после стабилизации основной.</li>
+              </ol>
+            </div>
+            <div class="card third">
+              <h3>Три вещи, которые двигают тебя сильнее всего</h3>
+              <div class="chips">
+                <span class="chip good">Core 170 → 175</span>
+                <span class="chip good">Main queue → 175</span>
+                <span class="chip good">Звёзды / traits</span>
+                <span class="chip good">Шмот / guild / season</span>
+              </div>
+              <div class="callout">
+                Если коротко: <b>с повышением Castle до 31 старый cap 170 больше не актуален</b>. Самый прямой прирост сейчас — поднять весь main queue до 175. Никаких «излишков» мяса для вторых пачек до этого момента нет.
+              </div>
+            </div>
+            <div class="card half">
+              <h3>Что НЕ является приоритетом прямо сейчас</h3>
+              <ul>
+                <li>Сильное развитие всех героев одновременно</li>
+                <li>Покупка сырых ресурсов в магазинах</li>
+                <li>Постоянная перестановка шмота ради +чуть-чуть power</li>
+                <li>Слишком ранняя прокачка второстепенных героев</li>
+                <li>Упор в шахты, если они не являются реальным bottleneck</li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Главная идея по аккаунту</h3>
+              <p>Не пытайся “оптимизировать всё”. Твой аккаунт уже перешёл в стадию, где выгоднее <b>жёстко выбирать победителей</b>: какие герои core, какой шмот core, какие валюты core.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="state">
+          <h2>2. Что сейчас важно именно тебе</h2>
+          <p class="lead">Короткий слепок состояния и ближайших решений.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Свежий слепок — 17.08.2026</h3>
+              <ul>
+                <li><b>Pyromancer</b> — Lv.170, 352,150 power, 109K ATK, 1.61M HP, capacity 630</li>
+                <li><b>Secret Keeper</b> — Lv.170, 290,208 power, 81.9K ATK, 1.63M HP, capacity 630</li>
+                <li><b>Bard</b> — Lv.170, 256,414 power, 90.9K ATK, 1.39M HP, capacity 630</li>
+                <li><b>Astrologer</b> — Lv.170, 220,414 power, 81.2K ATK, 1.17M HP, capacity 630</li>
+                <li><b>Minister</b> — Lv.170, 201,890 power, 69.5K ATK, 1.17M HP, capacity 630</li>
+                <li><b>Knight</b> — Lv.155, 257,803 power, 78.1K ATK, 2.36M HP, capacity 600</li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Топ-5 задач прямо сейчас</h3>
+              <ol class="steps">
+                <li><b>Pyromancer 170 → 175 первым.</b> Затем <b>Knight 155 → 175</b>, после чего закрыть Secret Keeper / Astrologer / Bard / Minister до 175.</li>
+                <li><b>Astrologer — Upgrade звездой:</b> 5/2 личных осколков, universal shards не нужны.</li>
+                <li><b>Secret Keeper → Bard → Pyromancer:</b> звёзды core можно улучшать параллельно, если это не съедает мясо.</li>
+                <li><b>Minister пока не субсидировать универсалами без причины.</b></li>
+                <li><b>Wilderness Hunter / Nature — стоп по уровням</b>, пока вся первая пачка не достигнет 175. <b>Knight не относится к стоп-листу: он сейчас в main.</b></li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Свежий слепок звёзд — 17.08.2026 14:38</h3>
+              <ul>
+                <li><b>Legendary universal shards:</b> 41.</li>
+                <li><b>Epic universal shards:</b> 28.</li>
+                <li><b>Pyromancer:</b> следующий star-upgrade доступен за 16 legendary universal; личных 0/16. Видимые навыки уже 10/10/10/10/10.</li>
+                <li><b>Secret Keeper:</b> 3 личных; следующий шаг можно закрыть за 1 universal + 3 personal вместо ожидания 4-го personal.</li>
+                <li><b>Bard:</b> следующий шаг стоит 2 legendary universal; личных 0/2.</li>
+                <li><b>Astrologer:</b> 5/2 personal — ап доступен без universal shards.</li>
+                <li><b>Minister:</b> 4/8 personal; ускорение требует 4 universal + 4 personal — низкий приоритет.</li>
+                <li><b>Knight traits:</b> 10/10/10/5; Hero HP II сейчас +15%, следующий уровень +18% и стоит 10 epic universal либо 10 личных.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h3>Короткий вердикт</h3>
+              <div class="chips">
+                <span class="chip good">Актуально</span>
+                <span class="chip blue">Главная мысль</span>
+              </div>
+              <p>Сейчас главный сдвиг такой: <b>Castle 31 поднял hero cap до 175</b>. Мясо — исключительно в текущую 1-ю пачку из 6 героев. <b>Pyromancer идёт первым, Knight — следующим из-за разрыва 155→175</b>; Wilderness Hunter и Nature ждут. Звёзды core-героев можно делать параллельно, если они не требуют мяса.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="packs">
+          <h2>3. Пачки и герои</h2>
+          <p class="lead">Не идеальная “абсолютная истина”, а практичная схема именно под твой текущий пул.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Main pack — текущая шестёрка</h3>
+              <ul>
+                <li><b>Secret Keeper</b> — front/tank · Lv.170 · 290,208 power</li>
+                <li><b>Pyromancer</b> — главный источник урона · Lv.170 · 352,150 power</li>
+                <li><b>Knight</b> — front/tank · Lv.155 · 257,803 power · после Pyromancer следующий по мясу</li>
+                <li><b>Bard</b> — поддержка/бафы · Lv.170 · 256,414 power</li>
+                <li><b>Astrologer</b> — сильный слот в core · Lv.170 · 220,414 power</li>
+                <li><b>Minister</b> — стабильный support/heal · Lv.170 · 201,890 power</li>
+              </ul>
+              <div class="callout"><b>Hostess</b> остаётся полезной, но при твоём текущем состоянии я бы держал её скорее как backup/flex, а не как обязательный core-slot поверх Astrologer/Minister.</div>
+            </div>
+            <div class="card half">
+              <h3>Кого держать рядом с core</h3>
+              <ul>
+                
+                <li><b>Hostess</b> — запасной support/flex, вне текущего main</li>
+                <li><b>Wilderness Hunter</b> — перспективный герой 2-й пачки, но её уровни <b>заморожены до cap 175 у всей main-6</b>.</li>
+                <li><b>Warlock</b> — вторичный carry для side content, но не приоритетнее League core</li>
+              </ul>
+              <div class="chips">
+                <span class="chip violet">Не размазывать мясо</span>
+                <span class="chip warn">Сначала core</span>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Логика по пачкам</h3>
+              <ul>
+                <li><b>1-я пачка</b> — максимум силы, шмота и мяса.</li>
+                <li><b>2-я пачка</b> — собирается из того, что не мешает 1-й; <b>мясо получает только после полного cap main</b>.</li>
+                <li><b>3-я пачка</b> — utility / events / filler; новый 6-й слот не является поводом отвлекать мясо от main.</li>
+                <li>Если новый герой появляется, не ломай core мгновенно — сначала смотри <b>уровень, звезды, шмот, роль</b>.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="stars">
+          <h2>4. Звёзды и traits</h2>
+          <p class="lead">После упора в level-cap это теперь один из главных источников роста. Ключевое правило: <b>personal shards тратим на core почти всегда, universal shards — только осознанно</b>.</p>
+          <div class="grid">
+            <div class="card twothird">
+              <h3>Что нажимать прямо сейчас — порядок</h3>
+              <ol class="steps">
+                <li><b>Astrologer — Upgrade.</b> Есть 5/2 личных осколков. Это чистый ап без расхода универсальных — практически безусловно выгодно.</li>
+                <li><b>Secret Keeper — Upgrade через blue path.</b> Цена фактически 1 legendary universal + 3 personal вместо ожидания ещё одного личного. Для main tank это очень хороший обмен.</li>
+                <li><b>Bard — Upgrade.</b> Нужно всего 2 legendary universal. Для core-support цена маленькая.</li>
+                <li><b>Pyromancer — следующий кандидат.</b> Стоит 16 legendary universal при 0/16 personal. Это уже крупная трата, но герой — главный carry; после первых двух дешёвых апов у тебя останется 38 universal, после Pyro — 22.</li>
+                <li><b>Minister — пока ждать.</b> Есть 4/8 личных; blue-path просит 4 universal + 4 personal. Лучше дождаться ещё 4 personal, если нет конкретной причины форсить.</li>
+                <li><b>Knight traits — стоп.</b> 10 epic universal ради +3 п.п. Hero HP (15% → 18%) сейчас не выглядит лучшим применением 28 универсальных epic-осколков.</li>
+              </ol>
+            </div>
+            <div class="card third">
+              <h3>Резерв universal shards</h3>
+              <p><b>Legendary:</b> 41 сейчас.</p>
+              <p>Astrologer: 0 → SK: −1 → Bard: −2 → Pyromancer: −16 = <b>22 останется</b>.</p>
+              <div class="callout">Это хороший баланс: усиливаешь три core-слота и всё равно сохраняешь больше половины стартового запаса после дешёвых шагов.</div>
+            </div>
+            <div class="card half">
+              <h3>Почему не Minister сейчас</h3>
+              <p>У него уже есть половина нужных личных осколков — 4/8. Universal shards здесь лишь заменяют недостающие 4. На carry/tank универсалы обычно дают больше ценности, чем на support, который и так функционален.</p>
+            </div>
+            <div class="card half">
+              <h3>Почему не Knight trait сейчас</h3>
+              <p>Следующий Hero HP II даёт рост с +15% до +18%, но просит 10 epic universal shards при 0/10 личных. Это <b>дорогой универсальный ресурс за локальные +3 п.п. HP</b> на вторичном танке.</p>
+            </div>
+            <div class="card">
+              <h3>Правило на будущее</h3>
+              <div class="callout">Если green Upgrade доступен только на personal shards — почти всегда нажимаем для core. Если нужен blue Upgrade с universal shards — сравниваем: <b>роль героя × цена универсалов × насколько близко следующий сильный breakpoint</b>.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="gear">
+          <h2>5. Шмот и крафт</h2>
+          <p class="lead">Главный принцип: хороший шмот — на главных героях, а не “всем понемногу”.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Базовые правила</h3>
+              <ul>
+                <li>Оранж/топ-шмот держать на <b>main-6</b>.</li>
+                <li>Support-герои могут жить на более слабом шмоте дольше, чем carry/tank.</li>
+                <li>Менять шмот по одной вещи стоит только если есть <b>явный выигрыш</b>, а не если просто загорелась стрелочка.</li>
+                <li>Если одиночная замена ломает полезный набор/расклад — не спеши.</li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Приоритет прокачки шмота</h3>
+              <ul>
+                <li><b>Pyromancer:</b> weapon → body → остальное</li>
+                <li><b>Secret Keeper:</b> body → head/def-slot → остальное</li>
+                <li><b>Bard / Astrologer:</b> после стабилизации танка и carry</li>
+                <li><b>Minister / Hostess:</b> позже, без фанатизма</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Практическое правило на каждый день</h3>
+              <div class="callout">
+                Если сомневаешься, не смотри на стрелочку power. Задай 3 вопроса:
+                <br>1) Это герой из main pack?
+                <br>2) Это улучшает его ключевую роль?
+                <br>3) Это не съедает ресурс, который сильнее нужен carry/tank?
+              </div>
+            </div>
+            <div class="card">
+              <h3>Что дальше крафтить</h3>
+              <p>Следующие элементы крафта стоит выбирать по роли, а не по принципу “что ближе выпало”.</p>
+              <ul>
+                <li>Сначала укрепляй ключевые слоты <b>tank + main carry</b>.</li>
+                <li>Потом — второй эшелон core (Bard / Astrologer).</li>
+                <li>Поддержку докручивай, когда main pack уже не сыпется и не упирается в выживаемость.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="meat">
+          <h2>6. Мясо и stamina</h2>
+          <p class="lead">Castle 31 поднял hero level cap до <b>175</b>. Поэтому правило снова жёсткое: <b>100% мяса — в 1-ю пачку, пока каждый герой main queue не достигнет 175</b>.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Приоритет мяса — 18.08.2026</h3>
+              <ol class="steps">
+                <li><b>Pyromancer: 170 → 175 первым.</b></li>
+                <li><b>Knight: 155 → 175 следующим.</b> Он в текущей main-6, поэтому его большой level-gap нельзя оставлять как «secondary».</li>
+                <li>После Pyromancer и Knight закрыть <b>Secret Keeper / Astrologer / Bard / Minister</b> до 175. Пока хотя бы один герой первой пачки ниже 175 — <b>вторая и третья пачки получают 0 мяса</b>.</li>
+                <li>Внутри первой пачки можно слегка опережать героя, который реально ограничивает бой: танка по выживаемости или carry по урону, но конечная цель — быстро закрыть всех.</li>
+                <li>После полного 175 — <b>сначала копить под следующий cap</b> (Castle 32 = 180), особенно если ап Castle уже близко.</li>
+                <li>Только если следующий Castle далеко и запас действительно избыточный — заново решаем, стоит ли кормить 2-ю пачку.</li>
+              </ol>
+            </div>
+            <div class="card half">
+              <h3>Кого сейчас НЕ кормить</h3>
+              <ul>
+                
+                <li><b>Wilderness Hunter</b> — большой level-gap пока терпим.</li>
+                <li><b>Treeguard / Windwalker / Watcher / Priestess / Dancer / Pharmacist</b> — 3-я пачка использует то, что уже есть.</li>
+                <li><b>Hostess</b> — вне текущего core, значит без мяса.</li>
+              </ul>
+              <div class="callout"><b>Коротко:</b> первая пачка → 175 полностью → копить под 180. Только потом вторые составы.</div>
+            </div>
+            <div class="card half">
+              <h3>Как тратить stamina — сейчас</h3>
+              <ul>
+                <li><b>Текущая цель — мясо для main queue 170→175.</b> Flame Dragon на Difficult пока не фармится стабильно, поэтому не сливай stamina в неудачные попытки.</li>
+                <li><b>Fast Grind на сегодня исчерпан: 0/6.</b> Текущий idle на Lv.223 — <b>16,080 мяса/ч</b>; обычный Fast Grind дал бы 32,160 мяса за 20 stamina, но сегодня этот канал закрыт.</li>
+                <li><b>Leopard Spirit: limited pool уже полностью выбран.</b> Его можно бить только если гарантированная награда по мясу лучше альтернатив на мировой карте.</li>
+                <li><b>Главный текущий sink — Lv.30 Ruby Guard на мировой карте.</b> Цена 5 stamina, награда <b>8,709 мяса за победу</b> — это ≈<b>1,742 meat/stamina</b>. Свежий слепок: после серии атак осталось <b>3/10</b>.</li>
+                <li><b>Ruby Guard сейчас сильно лучше Flame Dragon по чистому мясу.</b> Flame Dragon даёт 7,027 мяса за 10 stamina (≈703/stamina), то есть Ruby Guard примерно <b>в 2.48 раза эффективнее</b>. Важно: <b>Attack ×5 работает только когда осталось минимум 5 атак</b>. При <b>3/10</b> кнопка ×5 даёт «Attack Limit Reached» — нужно нажать обычный <b>Attack</b> ещё 3 раза: 15 stamina → <b>26,127 мяса</b>.</li>
+                <li><b>Adventure-мобов без босса</b> специально ради мяса не фармим — их отдача низкая. Guild rally/world-map boss хороши по общей ценности, если гильдия их активно собирает.</li>
+                <li>Банки/доп. stamina по возможности держи под события, где расход даёт второй слой наград.</li>
+              </ul>
+              <div class="callout"><b>Коротко сейчас:</b> Fast Grind 0/6 → <b>Ruby Guard Lv.30: добить оставшиеся 3 атаки по одной</b> → затем проверить другой Lv.30 Ruby Guard. Если там новый лимит 10/10 — повторять; если лимит общий и тоже закрыт — искать следующий world-map источник с лучшим meat/stamina → guild rally. Flame Dragon пока не форсим.</div>
+            </div>
+            <div class="card half">
+              <h3>Исправление старого совета</h3>
+              <p>Старый совет переносить мясо в Wilderness Hunter был преждевременным. После Castle 31 cap стал 175, а <b>Knight подтверждён как часть текущей main-6</b>. Поэтому порядок сейчас: Pyromancer → Knight → остальные main до 175; Wilderness Hunter ждёт.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="shops">
+          <h2>7. Магазины</h2>
+          <p class="lead">Самый опасный источник тихих ошибок. Валюта приходит медленно, а мусор покупать легко.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Что смотреть каждый день</h3>
+              <ul>
+                <li><b>Points / Medal Store</b> — core-осколки, полезные speed-up’ы, точечные нужные вещи</li>
+                <li><b>Guild Store</b> — всё, что усиливает основной прогресс, а не разовая мелочь</li>
+                <li><b>Trade Store</b> — только если понимаешь, во что именно конвертируешь валюту</li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Что почти всегда плохая покупка</h3>
+              <ul>
+                <li>Сырые ресурсы (wood/meat/stone) за ценные валюты</li>
+                <li>Случайные покупки “потому что есть скидка”</li>
+                <li>Редкие валюты без конкретной цели</li>
+                <li>Покупка всего подряд в новых вкладках магазина</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Короткая логика по магазинам</h3>
+              <div class="callout">Магазин — это место, где ты <b>конвертируешь валюту в ускорение главной цели</b>. Если покупка не ускоряет main pack / core progression / важный bottleneck, значит она под сомнением.</div>
+            </div>
+            <div class="card">
+              <h3>Если не понимаешь валюту магазина</h3>
+              <ul>
+                <li>Не трать сразу.</li>
+                <li>Посмотри источник валюты и насколько она редкая.</li>
+                <li>Спроси себя: она копится быстро или это недельный ресурс?</li>
+                <li>Предпочитай <b>гибкость</b> вместо случайной мелочи.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="guild">
+          <h2>8. Гильдия</h2>
+          <p class="lead">Точка роста закрыта: ты уже перешёл в более сильную и живую гильдию — <b>[ATM] Best Friends</b>.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Текущий статус</h3>
+              <div class="chips"><span class="chip good">Сделано</span><span class="chip blue">[ATM] Best Friends</span></div>
+              <ul>
+                <li>Гильдия заметно сильнее прежней</li>
+                <li>Есть активные R4/R5 и сильные игроки</li>
+                <li>Открыт полноценный Guild Store и Guild Vault</li>
+                <li>Теперь выгоду надо забирать <b>ежедневно</b>, иначе сам переход теряет смысл</li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Что делать каждый день</h3>
+              <ol class="steps">
+                <li>Help / guild activities / donations</li>
+                <li>Проверить Guild Store</li>
+                <li>Проверить Guild Vault и цену следующего открытия</li>
+                <li>Участвовать в guild-событиях — это источник магазинной валюты и ключей</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Guild Boss · Charm Arrows</h3>
+              <p><b>Свежий слепок:</b> 8 стрел закрыли шкалу 32/40; после этого она перешла на <b>0/80</b>, а запас стал <b>89 Charm Arrows</b>. Значит 40/40 был <b>не максимальным Lv.4</b>, а промежуточным порогом.</p>
+              <ul>
+                <li>По интерфейсу после 40/40 активирован <b>Lv.1: Guild Boss Damage +5%</b>; следующий порог — <b>80 стрел</b>, после него будет следующий уровень boost.</li>
+                <li>Charm Arrow donation — <b>общая гильдейская шкала</b>: не нужно одному оплачивать весь следующий уровень, если его могут добить другие участники.</li>
+                <li><b>Сейчас не сливать 80 автоматически.</b> Подождать вклад гильдии и ближе к бою закрыть только фактический остаток до 80.</li>
+                <li>Если перед стартом шкала так и останется 0/80 и нужен следующий boost, ты технически можешь закрыть её один: 80 стрел → <b>8,000 Guild Points</b>, останется 9. Это emergency-вариант, не дефолт.</li>
+                <li>Каждая стрела даёт <b>100 Guild Points</b>; прогресс donation-уровней сбрасывается между циклами Guild Boss, поэтому стрелы выгоднее тратить там, где они реально закрывают общий порог.</li>
+              </ul>
+              <div class="callout"><b>Правило:</b> Charm Arrows = совместный ресурс на ступени Guild Boss. Донатим <b>недостающий хвост до следующего уровня</b>, а не весь запас просто потому, что кнопка All доступна.</div>
+            </div>
+            <div class="card">
+              <h3>Что теперь считается ошибкой</h3>
+              <div class="callout">Считать задачу «найти гильдию» всё ещё актуальной. Она уже решена. Теперь задача — <b>выжимать value из ATM</b>: store, vault, активности, help и события.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="season2">
+          <h2>9. Season 2 / Dragon Furnace</h2>
+          <p class="lead">Сезонная гильдейская механика, которую теперь стоит считать ежедневным обязательным ресурсным контуром.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Что делать с Obsidian</h3>
+              <div class="callout"><b>Жертвовать в Dragon Furnace.</b> Для твоего текущего состояния нет смысла держать Obsidian “на потом”: это ресурс прокачки гильдейской печи, а донат одновременно двигает общие сезонные бафы и даёт Guild Points.</div>
+              <ul>
+                <li>У тебя сейчас: <b>171 Obsidian</b></li>
+                <li>Каждая единица: <b>+100</b> прогресса furnace и <b>+10 Guild Points</b></li>
+                <li>Если отдать все 171: <b>+17,100</b> к шкале и <b>+1,710 Guild Points</b></li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Почему прямо сейчас особенно выгодно</h3>
+              <p>Overall Boost сейчас <b>760,300 / 797,400</b>. До следующего апгрейда не хватает <b>37,100</b>. Твои 171 Obsidian закроют <b>17,100</b> — почти половину остатка — и оставят гильдии всего <b>20,000</b> прогресса.</p>
+              <div class="chips"><span class="chip good">Donate all 171</span><span class="chip blue">+1,710 Guild Points</span></div>
+            </div>
+            <div class="card half">
+              <h3>Что даст следующий Overall Boost</h3>
+              <ul>
+                <li>Temperature: <b>7.5°C → 7.8°C</b></li>
+                <li>Soldier Training Speed: <b>21% → 22%</b></li>
+                <li>Healing Speed: <b>15% → 15.5%</b></li>
+                <li>PvE Marching Speed: <b>20% → 20.5%</b></li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Откуда брать Obsidian</h3>
+              <ul>
+                <li>обычный seasonal Point Match</li>
+                <li>season merchant / caravan rewards</li>
+                <li>автопроизводство захваченных гильдией ruins</li>
+              </ul>
+              <div class="callout">Практическое правило: <b>Obsidian не складируем — регулярно отдаём furnace</b>. Исключение только если в игре прямо появляется отдельный временный ивент с очками именно за момент доната.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="vault">
+          <h2>10. Guild Vault</h2>
+          <p class="lead">Новая важная механика. Здесь ключи конвертируются в случайные награды из пула из 10 позиций, а цена открытия растёт после каждого клика.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Что мы уже точно видим</h3>
+              <ul>
+                <li>В пуле <b>10 наград</b>; после сбора всех 10 Vault сбрасывается автоматически</li>
+                <li>Цена растёт ступенчато: было <b>1 → 2 → 2 → 2 → 3 → 3</b> ключа за открытия</li>
+                <li>После пяти открытий у тебя теперь <b>0 ключей</b>; следующая попытка всё ещё стоит <b>3 ключа</b></li>
+                <li>Уже получено: <b>30 × 5-минутных speed-up</b>, <b>Advanced Relocate</b>, <b>5 × Level-tied Stone Chest</b>, <b>5 × красный/ruby resource chest</b> и <b>5 × Lv.1 Rune Chest</b></li>
+                <li>В оставшемся пуле всего <b>5 наград</b>: <b>Titan Mark</b>, <b>1000 diamonds</b>, <b>5 meat chests</b>, <b>3 recruitment tickets</b> и <b>5 timber chests</b></li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Что такое Titan Mark</h3>
+              <p>По описанию в игре: это редкий материал, который позволяет создать <b>faction mark</b> при крафте gear. Поэтому его не тратить вслепую и не считать обычным расходником.</p>
+              <div class="chips"><span class="chip good">Сохранять</span><span class="chip blue">Gear progression</span></div>
+            </div>
+            <div class="card">
+              <h3>Что делать прямо сейчас</h3>
+              <div class="callout"><b>Сейчас стоп только потому, что ключей 0.</b> Следующее открытие стоит <b>3</b>, а оставшийся пул стал даже привлекательнее: 5 наград, из которых <b>Titan Mark + 1000 diamonds + 5 meat chests</b> — три очень хорошие цели. Поэтому как только накопишь <b>3 Vault Keys</b>, открывай ещё раз. Если цена после этого вырастет — снова переоценим пул.</div>
+            </div>
+            <div class="card half">
+              <h3>Правило расхода ключей</h3>
+              <ul>
+                <li>Дешёвые ранние открытия — почти всегда стоит брать</li>
+                <li>Чем выше цена следующей попытки, тем важнее смотреть на оставшийся пул</li>
+                <li>Не покупать сырые ресурсы в Guild Store, если та же валюта может превратиться в Vault Keys</li>
+                <li>Не прожимать серию вслепую: после каждого роста цены заново оцениваем оставшийся пул</li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Следующий контрольный скрин</h3>
+              <p><b>Прямо сейчас:</b> ничего не нажимаем — ключей 0. Следующая контрольная точка: купил/получил ещё <b>3 Vault Keys</b> → открывай один раз и присылай результат. Сейчас особенно важно поймать <b>Titan Mark</b>, diamonds или meat; при росте цены после следующего клика пересчитаем ценность.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="routine">
+          <h2>11. Ежедневный маршрут</h2>
+          <p class="lead">Шпаргалка, чтобы не думать каждый раз заново.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Каждый день</h3>
+              <ol class="steps">
+                <li>Забрать idle rewards</li>
+                <li>Guild: help / donate / активности / чат</li>
+                <li>Season 2: Obsidian → Dragon Furnace; сейчас можно отдать <b>все 171</b> (это +17,100 furnace progress и +1,710 Guild Points)</li>
+                <li>Guild Store + Vault: сейчас <b>0 ключей / цена 3</b> — копить минимум 3 Vault Keys и открыть ещё 1 раз; ключи остаются приоритетной покупкой Guild Points</li>
+                <li>Потратить natural stamina по приоритету дня</li>
+                <li>Проверить остальные ключевые магазины</li>
+                <li>Проверить main queue: все ли герои уже Lv.175. Пока нет — весь корм только туда</li>
+                <li>Проверить, есть ли осмысленный апгрейд шмота</li>
+                <li>Закрыть dailies / events</li>
+              </ol>
+            </div>
+            <div class="card half">
+              <h3>Раз в несколько дней / неделю</h3>
+              <ul>
+                <li>Пересмотреть, не изменился ли core состав</li>
+                <li>Понять, какой следующий piece крафтится</li>
+                <li>Проверить, не застрял ли ты из-за гильдии/ивентов</li>
+                <li>Посмотреть, не пора ли копить валюту под более выгодный день/ивент</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Если совсем нет времени</h3>
+              <div class="callout">Минимальный must-do: 1) Guild activities + Vault 2) Stamina 3) Idle rewards 4) Весь main queue → 175 5) Быстрый взгляд в магазины</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="outdated">
+          <h2>12. Что устарело</h2>
+          <p class="lead">Это важно: не все старые советы одинаково актуальны.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>Устарело из-за новых открытий</h3>
+              <div class="chips"><span class="chip bad">Устарело</span></div>
+              <ul>
+                <li>Советы по пачкам <b>до Astrologer</b></li>
+                <li>Советы по пачкам <b>до Wilderness Hunter</b></li>
+                <li>Любая логика <b>до открытия 5-го слота в 3-й пачке</b></li>
+                <li>Предположения, что ты надолго останешься в слабой гильдии</li>
+                <li>Старый вывод «после 170 можно кормить secondary» — <b>устарел</b>: Castle 31 поднял cap до 175, поэтому мясо снова главный ресурс main queue.</li>
+                <li>Старое отнесение <b>Knight к secondary</b> — <b>ошибка</b>: текущие боевые скрины подтверждают, что Knight входит в main-6.</li>
+                <li>Совет «идти в IRN» как текущая цель — <b>устарел</b>: ты уже вступил в [ATM] Best Friends</li>
+                <li>Совет «40/40 Charm Arrows = максимальный Lv.4 +20%» — <b>ошибка</b>. Новый скрин показал переход 40 → следующая шкала 80; 40 был лишь промежуточным donation-порогом.</li>
+              </ul>
+            </div>
+            <div class="card half">
+              <h3>Почти не устаревает</h3>
+              <div class="chips"><span class="chip good">Не устаревает</span></div>
+              <ul>
+                <li>Сначала делай 1 сильную пачку</li>
+                <li>Не размазывай мясо и шмот</li>
+                <li>Ценные валюты не трать на сырьё</li>
+                <li>Активная гильдия сильнее пассивной почти всегда</li>
+                <li>Трать stamina под задачу, а не автоматически</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Как помечать старые советы у себя в голове</h3>
+              <ul>
+                <li>Он был дан <b>до нового героя</b>?</li>
+                <li>Он был дан <b>до нового unlock</b>?</li>
+                <li>Он был дан <b>до смены гильдии</b>?</li>
+              </ul>
+              <div class="callout">Если ответ “да”, значит совет надо не выбрасывать, а <b>переоценить</b>.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="blindspots">
+          <h2>13. О чём ты ещё не спрашивал, но стоит думать</h2>
+          <p class="lead">Это темы, которые обычно всплывают позже и стоят ресурсов, если их игнорировать.</p>
+          <div class="grid">
+            <div class="card half">
+              <h3>1) Тратить ресурсы в правильные дни</h3>
+              <p>Многие игры сильнее награждают не просто за прокачку, а за прокачку <b>во время события</b>. Это особенно важно для stamina, speed-up’ов и части валют.</p>
+            </div>
+            <div class="card half">
+              <h3>2) Не разбирать универсальные штуки без цели</h3>
+              <p>Universal relic shards, редкие сундуки, выборные ресурсы — это гибкость. Сначала цель, потом расход.</p>
+            </div>
+            <div class="card half">
+              <h3>3) Проверять новый контент на ловушки внимания</h3>
+              <p>Не всё новое срочно. Если новая механика не усиливает core, возможно, её пока достаточно просто понимать, а не качать.</p>
+            </div>
+            <div class="card half">
+              <h3>4) Второй состав — только после опоры</h3>
+              <p>Вторая и третья пачки важны, но становятся выгодными только когда первая уже не хромает.</p>
+            </div>
+            <div class="card">
+              <h3>5) Adventure / Flame Dragon: проблема не в отсутствии хила</h3>
+              <p>По боевым скринам лечение в main League <b>реально проходит</b>: видны массовые зелёные тики примерно <b>+104K / +138K</b> и отдельный <b>+70K</b>. Но Flame Dragon одновременно раздаёт AoE примерно <b>60–117K по нескольким героям</b> и отдельные тяжёлые удары около <b>210K</b>, поэтому входящий burst легко перекрывает лечение.</p>
+              <div class="callout"><b>Тактика:</b> не стой всей пачкой в красном круге. Когда появляется большой красный AoE и/или дракон закрывается жёлтым щитом — вручную отвести пачку за границу telegraph, переждать удар и вернуться. Это сейчас важнее, чем пытаться решить босса дополнительным мясом во secondary.</div>
+            </div>
+            <div class="card">
+              <h3>Итоговая карта мышления</h3>
+              <div class="callout">
+                <b>1.</b> Есть ли сильная гильдия?<br>
+                <b>2.</b> Кто моя текущая main-6?<br>
+                <b>3.</b> Есть ли новый level-cap? Сейчас да: Castle 31 = 175. Пока main ниже 175 — мясо только туда.<br>
+                <b>4.</b> Есть ли бесплатный/дешёвый star-upgrade на core без слива universal shards?<br>
+                <b>5.</b> Есть ли осмысленный апгрейд шмота?<br>
+                <b>6.</b> Что делать со stamina: Fast Grind доступен? Если нет — high-level world-map monster или выгодный boss по meat/stamina?<br>
+                <b>7.</b> Какие покупки реально ускоряют прогресс?<br>
+                <b>8.</b> Только потом думаю о secondary/third pack.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="footer">Обновлено 18.08.2026 20:08: Guild Boss — 8 стрел закрыли 32/40, после чего шкала перешла на 0/80; запас 89. Вывод: 40/40 был промежуточным уровнем, не максимумом. Следующий порог не оплачивать в одиночку заранее — ждать вклад гильдии и ближе к бою закрывать только недостающий хвост.</div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll('#nav button');
+    const sections = document.querySelectorAll('.section');
+    function activate(targetId){
+      buttons.forEach(btn => btn.classList.toggle('active', btn.dataset.target === targetId));
+      sections.forEach(sec => sec.classList.toggle('active', sec.id === targetId));
+      if (window.innerWidth < 980) {
+        document.getElementById(targetId).scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    }
+    buttons.forEach(btn => btn.addEventListener('click', () => {
+      const id = btn.dataset.target;
+      activate(id);
+      history.replaceState(null, '', '#' + id);
+    }));
+    const initial = location.hash.replace('#','');
+    if (initial && document.getElementById(initial)) activate(initial);
+  </script>
+</body>
+</html>
