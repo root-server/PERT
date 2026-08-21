@@ -1,0 +1,82 @@
+name: Patch Top Heroes queues
+on:
+  push:
+    branches: [gh-pages]
+    paths:
+      - '.github/workflows/patch-topheroes-queues.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+      - name: Patch navigator
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          p = Path('topheroes/index.html')
+          s = p.read_text()
+          replacements = {
+            '<li><b>Main League — текущие 6:</b> Pyromancer 170, Secret Keeper 170, Knight 170, Bard 170, Astrologer 170, Minister 170. Новый cap после Castle 31 — <b>Lv.175</b>.</li>': '<li><b>Main League Q1:</b> Pyromancer, Secret Keeper, Knight, Bard, Astrologer, Minister — все <b>Lv.180</b>, текущий cap закрыт.</li>',
+            '<li><b>Мясо:</b> 100% корма идёт в текущую 1-ю пачку из 6 героев. <b>Сначала Pyromancer 170→175, затем Knight 170→175</b>; потом закрываем остальных до 175. Druid и вся Q3 пока получают 0 мяса.</li>': '<li><b>Мясо:</b> Q1 уже полностью <b>Lv.180</b>, поэтому корм переносим в <b>Q2</b>. Приоритет: Wilderness Hunter → Shaman → Warlock → Barbarian → Rogue; Rare Guard — последний/временный слот. Q3, включая Druid Lv.1, пока получает 0.</li>',
+            '<b>Castle 31 → main queue 170→175 → только после полного cap думать о 2-й пачке → звёзды/traits → точечный шмот → guild/season-активности → Vault → грамотная трата stamina</b>.': '<b>Q1 уже закрыта на Lv.180 → теперь концентрируем мясо в Q2 → Q3 не кормим до стабилизации Q2 → звёзды/traits → точечный шмот → guild/season-активности → Vault → грамотная трата stamina</b>.',
+            '<li><b>Level cap / мясо.</b> Castle 31 поднял cap с 170 до <b>175</b>. Сейчас никакого мяса во 2-ю/3-ю пачку: сначала весь основной состав довести до 175.</li>': '<li><b>Level cap / мясо.</b> Q1 уже вся <b>Lv.180</b> и дальше не кормится. Поэтому весь новый meat идёт в Q2; Q3 остаётся замороженной.</li>',
+            '<li><b>Wilderness Hunter</b> — перспективный герой 2-й пачки, но её уровни <b>заморожены до cap 175 у всей main-6</b>.</li>': '<li><b>Wilderness Hunter</b> — теперь первый meat-target Q2; качаем 150→180.</li>',
+            '<li><b>Мясо пока не даём.</b> Druid полезен уже как улучшение состава Q3, но main League всё ещё должен первым закрыть Lv.175.</li>': '<li><b>Мясо пока не даём.</b> Q1 уже Lv.180; теперь сначала закрываем Q2. Druid Lv.1 ждёт очереди Q3.</li>',
+            '<li><b>2-я пачка</b> — собирается из того, что не мешает 1-й; <b>мясо получает только после полного cap main</b>.</li>': '<li><b>2-я пачка</b> — теперь главный получатель мяса, потому что Q1 полностью закрыта на Lv.180.</li>',
+            '<li><b>3-я пачка</b> — utility / events / filler; новый 6-й слот не является поводом отвлекать мясо от main.</li>': '<li><b>3-я пачка</b> — utility / events / filler; пока Q2 не стабилизирована на cap, мясо сюда не идёт.</li>',
+            '<li><b>Treeguard / Windwalker / Druid / Watcher / Priestess / Dancer</b> — текущая Nature Q3; Druid заменяет Pharmacist. Но по мясу вся Q3 по-прежнему заморожена.</li>': '<li><b>Treeguard 155 / Windwalker 155 / Priestess 155 / Watcher 155 / Dancer 155 / Druid 1</b> — текущая Nature Q3. По мясу вся Q3 по-прежнему заморожена, пока развиваем Q2.</li>',
+            '<li><b>Текущая цель — мясо для main queue 170→175.</b> Flame Dragon на Difficult пока не фармится стабильно, поэтому не сливай stamina в неудачные попытки.</li>': '<li><b>Текущая цель — мясо для Q2.</b> Flame Dragon на Difficult пока не фармится стабильно, поэтому не сливай stamina в неудачные попытки.</li>',
+            '<p>Старый совет переносить мясо в Wilderness Hunter был преждевременным. После Castle 31 cap стал 175, а <b>Knight подтверждён как часть текущей main-6</b>. Поэтому порядок сейчас: Pyromancer → Knight → остальные main до 175; Wilderness Hunter ждёт.</p>': '<p>Старое правило «Wilderness Hunter ждёт, пока Q1 не закроет cap» уже выполнилось: Q1 теперь вся Lv.180. Поэтому Wilderness Hunter становится первым meat-target Q2.</p>',
+            '<b>3.</b> Есть ли новый level-cap? Сейчас да: Castle 31 = 175. Пока main ниже 175 — мясо только туда.<br>': '<b>3.</b> Q1 на текущем cap? Да: сейчас вся Q1 Lv.180. Значит meat-layer переключён на Q2.<br>'
+          }
+          for a,b in replacements.items():
+              s = s.replace(a,b)
+          s = re.sub(r'<p class="lead">Castle 31 поднял hero level cap до <b>175</b>\. Поэтому правило снова жёсткое: <b>100% мяса — в 1-ю пачку, пока каждый герой main queue не достигнет 175</b>\.</p>', '<p class="lead">Q1 уже полностью <b>Lv.180</b> и дальше не кормится. Правило концентрации сохраняется: <b>100% нового мяса теперь идёт в Q2</b>, а Q3 пока получает 0.</p>', s)
+          block = re.search(r'<div class="card half">\s*<h3>Приоритет мяса — 18\.08\.2026</h3>.*?</div>\s*<div class="card half">\s*<h3>Кого сейчас НЕ кормить</h3>.*?</div>', s, re.S)
+          if block:
+              new = '''<div class="card half">
+              <h3>Приоритет мяса — текущий</h3>
+              <ol class="steps">
+                <li><b>Wilderness Hunter: 150 → 180.</b> Сильнейший текущий DPS-кандидат второй пачки.</li>
+                <li><b>Shaman: 155 → 180.</b> Хил и sustain Q2.</li>
+                <li><b>Warlock: 155 → 180.</b> Сильный support, который дольше остальных текущих Horde-героев сохраняет ценность.</li>
+                <li><b>Barbarian: 155 → 180.</b> Основной frontline.</li>
+                <li><b>Rogue: 155 → 180</b> — после легендарной четвёрки.</li>
+                <li><b>Guard: 150</b> — последним. Это Rare временный tank; если появится Swordmaster/другой сильный Horde tank, мясо лучше сразу перенаправить в замену.</li>
+              </ol>
+            </div>
+            <div class="card half">
+              <h3>Кого сейчас НЕ кормить</h3>
+              <ul>
+                <li><b>Treeguard 155 / Windwalker 155 / Priestess 155 / Watcher 155 / Dancer 155 / Druid 1</b> — вся Q3 ждёт, пока закроем основные слоты Q2.</li>
+                <li><b>Hostess</b> — вне текущих пачек, значит без мяса.</li>
+              </ul>
+              <div class="callout"><b>Коротко:</b> Q1 = max Lv.180 → теперь весь meat в Q2 → Q3 только после стабилизации Q2.</div>
+            </div>'''
+              s = s[:block.start()] + new + s[block.end():]
+          if 'Q2 · текущий Horde-состав' not in s:
+              marker = '''            <div class="card">
+              <h3>Логика по пачкам</h3>'''
+              q2 = '''            <div class="card">
+              <h3>Q2 · текущий Horde-состав</h3>
+              <ul>
+                <li><b>Warlock 155</b></li><li><b>Guard 150</b> — временный Rare tank</li><li><b>Shaman 155</b></li><li><b>Barbarian 155</b></li><li><b>Wilderness Hunter 150</b></li><li><b>Rogue 155</b></li>
+              </ul>
+              <div class="callout"><b>Теперь это главный meat-target.</b> Q1 уже max Lv.180; Guard оставляем последним кандидатом на вложения.</div>
+            </div>
+'''
+              s = s.replace(marker, q2 + marker)
+          p.write_text(s)
+      - name: Commit navigator update and remove one-shot workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add topheroes/index.html
+          git rm .github/workflows/patch-topheroes-queues.yml
+          git commit -m "Update Top Heroes queues: Q1 Lv180, meat to Q2"
+          git push
